@@ -8,7 +8,7 @@
 
 <Router {url}>
   <Nav {location} />
-  <div class="p-4">
+  <div class="p-2 sm:p-4">
     <Route path="/">
       <Home />
     </Route>
