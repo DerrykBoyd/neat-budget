@@ -1,10 +1,9 @@
 <script>
   export let location
-  console.log(location)
 </script>
 
 <style>
   /* your styles go here */
 </style>
 
-<h1 class="text-lg">About Page {location.href}</h1>
+<h1 class="text-2xl text-center">About Page {location.pathname}</h1>
