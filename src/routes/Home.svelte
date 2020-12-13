@@ -1,13 +1,22 @@
 <script>
-  let name = "Me"
+
+  let name = "Todo Budgeting App";
 </script>
 
 <style>
-  
 </style>
 
-<div class="text-center">
-  <h1 class="text-lg text-red-500">{name}</h1>
-  <h1 class="text-lg text-red-500">Hello {name}!</h1>
-  <p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+<div class="home-content text-center">
+  <h1 class="text-2xl text-green-800">{name}</h1>
+  <ol class="py-2">
+    <li class="p-2">
+      <p>Todo add signin options</p>
+    </li>
+    <li class="p-2">
+      <p>Todo add some data</p>
+    </li>
+    <li class="p-2">
+      <p>Todo add brand colors</p>
+    </li>
+  </ol>
 </div>

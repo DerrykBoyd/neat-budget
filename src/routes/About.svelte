@@ -1,9 +1,11 @@
 <script>
-  export let location
+  export let location;
 </script>
 
 <style>
   /* your styles go here */
 </style>
 
-<h1 class="text-2xl text-center">About Page {location.pathname}</h1>
+<div class="about-content text-center">
+  <h1 class="text-2xl text-green-800">Todo write the about page</h1>
+</div>

@@ -1,6 +1,6 @@
 <script>
   import { Router, Link, Route } from "svelte-routing";
-  import Nav from "./components/Nav.svelte";
+  import Nav from "./components/Nav/Nav.svelte";
   import Home from "./routes/Home.svelte";
   import About from "./routes/About.svelte";
   export let url = "";
@@ -8,7 +8,7 @@
 
 <Router {url}>
   <Nav {location} />
-  <div class="p-2 sm:p-4">
+  <div class="main-content p-2 sm:p-4">
     <Route path="/">
       <Home />
     </Route>
