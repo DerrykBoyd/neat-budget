@@ -1,14 +1,11 @@
 <script>
   import Link from "svelte-routing/src/Link.svelte";
-  import { links } from "svelte-routing";
   import { clickOutside } from "../../utils/clickOutside";
   import { user, loadingUser } from "../../store/user";
   import MobileMenuBtn from "./MobileMenuBtn.svelte";
   import NavBtn from "./NavBtn.svelte";
   import Loader from "../Base/Loader.svelte";
-  import About from "../../routes/About.svelte";
-  import App from "../../App.svelte";
-  import Home from "../../routes/Home.svelte";
+  import NavUserMenu from "./NavUserMenu.svelte";
 
   export let location;
 
@@ -28,6 +25,7 @@
       loadingUser.set(false);
     }, 2000);
   };
+
   const logout = () => {
     user.set(null);
     toggleUserMenu();
@@ -38,12 +36,10 @@
   /* your styles go here */
 </style>
 
-<!-- This example requires Tailwind CSS v2.0+ -->
 <nav class="bg-green-500">
   <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex items-center justify-between h-16">
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-        <!-- Mobile menu button-->
         <MobileMenuBtn {toggleMobileMenu} {mobileMenuOpen} />
       </div>
       <div
@@ -69,7 +65,7 @@
       </div>
       <div
         class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <!-- Profile dropdown -->
+        <!-- user menu and login -->
         {#if $user}
           <div
             use:clickOutside
@@ -88,44 +84,21 @@
                   alt="" />
               </button>
             </div>
-            <div
-              use:links
-              class={`${userMenuOpen ? 'block' : 'hidden'} origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5`}
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="user-menu">
-              <a
-                on:click={toggleUserMenu}
-                href="/profile"
-                class={`block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100`}
-                role="menuitem">Your Profile</a>
-              <a
-                on:click={toggleUserMenu}
-                href="/settings"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                role="menuitem">Settings</a>
-              <a
-                on:click={logout}
-                href="/"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                role="menuitem">Sign out</a>
-            </div>
+            <NavUserMenu {userMenuOpen} {toggleUserMenu} {logout} />
           </div>
         {:else}
           <div
             class="text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
             on:click={login}>
             {#if $loadingUser}
-               <Loader text="Loading..." />
-               {:else}
-                 Log In
-            {/if}
+              <Loader text="Loading..." />
+            {:else}Log In{/if}
           </div>
         {/if}
       </div>
     </div>
   </div>
-
+  <!-- mobile menu dropdown -->
   <div
     class={`${mobileMenuOpen ? 'block' : 'hidden'} sm:hidden`}
     on:click={toggleMobileMenu}>
