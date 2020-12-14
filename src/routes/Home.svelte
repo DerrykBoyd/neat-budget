@@ -1,5 +1,5 @@
 <script>
-  import { user } from "../store/user";
+  import { user, dbUser } from "../store/user";
 
   let name = "Todo Budgeting App";
 </script>
@@ -22,8 +22,8 @@
   </ol>
   <div id="firebaseui-auth-container" />
   <div id="loader" />
-  {#if $user}
-    <!-- content here -->
-    <p>{$user.email}</p>
+  {#if $user && $dbUser}
+    <p>Auth User - {$user.email}</p>
+    <p>DB User - {$dbUser.displayName}</p>
   {/if}
 </div>
