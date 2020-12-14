@@ -27,6 +27,8 @@
     "tailwindcss": "^2.0.2"
   },
   "dependencies": {
+    "firebase": "^8.2.0",
+    "firebaseui": "^4.7.1",
     "sirv-cli": "^1.0.0",
     "svelte-routing": "^1.4.2"
   }

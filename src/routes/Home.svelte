@@ -1,4 +1,5 @@
 <script>
+  import { user } from "../store/user";
 
   let name = "Todo Budgeting App";
 </script>
@@ -19,4 +20,10 @@
       <p>Todo add brand colors</p>
     </li>
   </ol>
+  <div id="firebaseui-auth-container" />
+  <div id="loader" />
+  {#if $user}
+    <!-- content here -->
+    <p>{$user.email}</p>
+  {/if}
 </div>

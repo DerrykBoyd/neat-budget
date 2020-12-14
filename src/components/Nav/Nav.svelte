@@ -1,11 +1,12 @@
 <script>
   import Link from "svelte-routing/src/Link.svelte";
   import { clickOutside } from "../../utils/clickOutside";
-  import { user, loadingUser } from "../../store/user";
+  import { user } from "../../store/user";
   import MobileMenuBtn from "./MobileMenuBtn.svelte";
   import NavBtn from "./NavBtn.svelte";
   import Loader from "../Base/Loader.svelte";
   import NavUserMenu from "./NavUserMenu.svelte";
+  import { auth } from "../../utils/firebase";
 
   export let location;
 
@@ -18,16 +19,8 @@
   const closeUserMenu = () => (userMenuOpen = false);
   const setCurrentPath = (path) => (currentPath = path);
 
-  const login = () => {
-    loadingUser.set(true);
-    setTimeout(() => {
-      user.set("Test");
-      loadingUser.set(false);
-    }, 2000);
-  };
-
   const logout = () => {
-    user.set(null);
+    auth.signOut();
     toggleUserMenu();
   };
 </script>
@@ -85,14 +78,6 @@
               </button>
             </div>
             <NavUserMenu {userMenuOpen} {toggleUserMenu} {logout} />
-          </div>
-        {:else}
-          <div
-            class="text-white px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-            on:click={login}>
-            {#if $loadingUser}
-              <Loader text="Loading..." />
-            {:else}Log In{/if}
           </div>
         {/if}
       </div>

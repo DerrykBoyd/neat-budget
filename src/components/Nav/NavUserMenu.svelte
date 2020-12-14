@@ -1,5 +1,5 @@
 <script>
-  import {links} from "svelte-routing"
+  import { links } from "svelte-routing";
   export let userMenuOpen;
   export let toggleUserMenu;
   export let logout;
