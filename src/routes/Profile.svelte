@@ -1,7 +1,13 @@
 <script>
   import { currentPath } from "store/currentPath";
+  import { onMount } from "svelte";
+  import { navigate } from "svelte-routing";
+  import { dbUser } from "../store/user";
   export let location;
   currentPath.set("/profile");
+  onMount(() => {
+    if (!$dbUser) navigate("/");
+  });
 </script>
 
 <style>
