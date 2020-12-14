@@ -31,7 +31,16 @@
   <h1 class="text-2xl text-green-800">{name}</h1>
   <ol class="py-2">
     <li class="p-2">
-      <p>Todo add signin options</p>
+      <p class="line-through">Todo add signin options</p>
+    </li>
+    <li class="p-2">
+      <p>Todo User Settings - Change Password</p>
+    </li>
+    <li class="p-2">
+      <p>Todo User Settings - Change Profile Photo</p>
+    </li>
+    <li class="p-2">
+      <p>Todo User Settings - Change Display Name</p>
     </li>
     <li class="p-2">
       <p>Todo add some data</p>

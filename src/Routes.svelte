@@ -5,6 +5,7 @@
   import About from "routes/About";
   import Settings from "routes/Settings";
   import { auth } from "utils/firebase";
+  import Profile from "routes/Profile";
   export let url = "";
 </script>
 
@@ -16,5 +17,6 @@
     </Route>
     <Route path="about" component={About} />
     <Route path="settings" component={Settings} />
+    <Route path="profile" component={Profile} />
   </div>
 </Router>
