@@ -35,7 +35,7 @@ export const uiConfig = {
   },
   // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
   signInFlow: "redirect",
-  signInSuccessUrl: "/",
+  signInSuccessUrl: "?login=true",
   signInOptions: [
     // Leave the lines as is for the providers you want to offer your users.
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
@@ -46,7 +46,3 @@ export const uiConfig = {
   // Privacy policy url.
   privacyPolicyUrl: "https://example.com",
 };
-
-if (ui.isPendingRedirect()) {
-  ui.start("#firebaseui-auth-container", uiConfig);
-}

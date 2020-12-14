@@ -9,7 +9,7 @@
 </script>
 
 <Router {url}>
-  <Nav {location} />
+  <Nav />
   <div class="main-content p-2 sm:p-4">
     <Route path="/">
       <Home />
