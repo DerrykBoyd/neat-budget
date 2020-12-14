@@ -1,10 +1,10 @@
 <script>
   import { Router, Link, Route, navigate } from "svelte-routing";
-  import Nav from "./components/Nav/Nav.svelte";
-  import Home from "./routes/Home.svelte";
-  import About from "./routes/About.svelte";
-  import Settings from "./routes/Settings.svelte";
-  import { auth } from "./utils/firebase";
+  import Nav from "components/Nav/Nav";
+  import Home from "routes/Home";
+  import About from "routes/About";
+  import Settings from "routes/Settings";
+  import { auth } from "utils/firebase";
   export let url = "";
 </script>
 

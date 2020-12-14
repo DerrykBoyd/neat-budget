@@ -1,6 +1,6 @@
 import { debug } from "svelte/internal";
 import { readable, writable } from "svelte/store";
-import { auth, ui, uiConfig, db } from "../utils/firebase";
+import { auth, ui, uiConfig, db } from "utils/firebase";
 
 let updateUser;
 auth.onAuthStateChanged((newUser) => {

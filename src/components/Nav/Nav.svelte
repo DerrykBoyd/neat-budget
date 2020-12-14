@@ -1,13 +1,13 @@
 <script>
   import Link from "svelte-routing/src/Link.svelte";
-  import { clickOutside } from "../../utils/clickOutside";
-  import { dbUser } from "../../store/user";
-  import { currentPath } from "../../store/currentPath";
-  import MobileMenuBtn from "./MobileMenuBtn.svelte";
-  import NavBtn from "./NavBtn.svelte";
-  import Loader from "../Base/Loader.svelte";
-  import NavUserMenu from "./NavUserMenu.svelte";
-  import { auth } from "../../utils/firebase";
+  import { clickOutside } from "utils/clickOutside";
+  import { dbUser } from "store/user";
+  import { currentPath } from "store/currentPath";
+  import MobileMenuBtn from "./MobileMenuBtn";
+  import NavBtn from "./NavBtn";
+  import Loader from "components/Base/Loader";
+  import NavUserMenu from "./NavUserMenu";
+  import { auth } from "utils/firebase";
 
   let mobileMenuOpen = false;
   let userMenuOpen = false;

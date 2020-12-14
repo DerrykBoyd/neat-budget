@@ -1,6 +1,6 @@
 <script>
   import { Link } from "svelte-routing";
-  import { currentPath } from "../../store/currentPath";
+  import { currentPath } from "store/currentPath";
 
   export let text;
   export let to;

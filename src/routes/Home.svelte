@@ -1,8 +1,8 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
-  import { currentPath } from "../store/currentPath";
-  import { dbUser, loadingUser } from "../store/user";
-  import { ui, uiConfig } from "../utils/firebase";
+  import { currentPath } from "store/currentPath";
+  import { dbUser, loadingUser } from "store/user";
+  import { ui, uiConfig } from "utils/firebase";
 
   let name = "Todo Budgeting App";
   currentPath.set("/");
