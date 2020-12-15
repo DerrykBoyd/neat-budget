@@ -2,11 +2,11 @@
   import { currentPath } from "store/currentPath";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
-  import { dbUser } from "../store/user";
   export let location;
   currentPath.set("/settings");
+  let loggedIn = localStorage.getItem("loggedIn") === "true";
   onMount(() => {
-    if (!$dbUser) navigate("/");
+    if (!loggedIn) navigate("/");
   });
 </script>
 

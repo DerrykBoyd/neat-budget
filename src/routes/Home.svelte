@@ -1,7 +1,7 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
   import { currentPath } from "store/currentPath";
-  import { dbUser, loadingUser } from "store/user";
+  import { userEmail, displayName, loadingUser } from "store/user";
   import { ui, uiConfig } from "utils/firebase";
 
   let name = "Todo Budgeting App";
@@ -9,15 +9,15 @@
   onMount(() => {
     let queryString = new URLSearchParams(window.location.search);
     let hasLogin = queryString.has("login");
-    if (hasLogin || $loadingUser)
-      document.getElementById("firebaseui-auth-container").style.display =
-        "none";
+    let loggedIn = localStorage.getItem("loggedIn") === "true";
+    if (hasLogin || $loadingUser || loggedIn)
+      document.getElementById("firebaseui-auth-container").style.display = "none";
   });
   afterUpdate(() => {
     let queryString = new URLSearchParams(window.location.search);
     let hasLogin = queryString.has("login");
-    // debugger;
-    if (!$dbUser?.email && !hasLogin) {
+    let loggedIn = localStorage.getItem("loggedIn") === "true";
+    if (!$userEmail?.email && !hasLogin && !loggedIn) {
       document.getElementById("firebaseui-auth-container").style.display = "";
       ui.start("#firebaseui-auth-container", uiConfig);
     } else ui.reset();
@@ -51,7 +51,7 @@
   </ol>
   <div id="firebaseui-auth-container" />
   <div id="loader" />
-  {#if $dbUser}
-    <p>DB User Logged In - {$dbUser.displayName}</p>
+  {#if $displayName}
+    <p>DB User Logged In - {$displayName}</p>
   {/if}
 </div>

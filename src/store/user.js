@@ -5,15 +5,21 @@ import { auth, ui, uiConfig, db } from "utils/firebase";
 let updateUser;
 auth.onAuthStateChanged((newUser) => {
   if (newUser) {
+    localStorage.setItem("loggedIn", "true");
     loadingUser.set(true);
-    user.set(newUser);
+    displayName.set(newUser.displayName);
+    photoURL.set(newUser.photoURL);
+    userEmail.set(newUser.email);
     updateUser = db
       .collection("users")
       .doc(newUser.uid)
       .onSnapshot(
         (doc) => {
           if (doc.exists) {
-            dbUser.set(doc.data());
+            let user = doc.data();
+            displayName.set(user.displayName);
+            photoURL.set(user.photoURL);
+            userEmail.set(user.email);
             loadingUser.set(false);
             console.log("User fetched from db");
           } else {
@@ -32,8 +38,10 @@ auth.onAuthStateChanged((newUser) => {
         (e) => console.log(e)
       );
   } else {
-    user.set(null);
-    dbUser.set(null);
+    localStorage.setItem("loggedIn", "false");
+    displayName.set(null);
+    photoURL.set(null);
+    userEmail.set(null);
     if (updateUser) {
       updateUser();
       console.log("Unsub from user");
@@ -41,6 +49,7 @@ auth.onAuthStateChanged((newUser) => {
   }
 });
 
-export const user = writable(null);
-export const dbUser = writable(null);
+export const displayName = writable(null);
+export const photoURL = writable(null);
+export const userEmail = writable(null);
 export const loadingUser = writable(false);
