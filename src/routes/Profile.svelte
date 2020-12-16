@@ -26,9 +26,10 @@
       .update({
         displayName: $displayName,
       })
-      .then(() => console.log("Display Name Updated"))
+      .then(() => console.log("Display Name Updated")) // TODO - Add saved feedback
       .catch((e) => {
         console.error("Error updating displayName: " + e);
+        // TODO add error feedback
       });
   }
 </script>
