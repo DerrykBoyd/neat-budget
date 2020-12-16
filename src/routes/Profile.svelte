@@ -40,9 +40,7 @@
     </div>
     <div class="profile-settings w-full sm:w-60">
       <Input autocomplete="name" name="displayName" label="Display Name" bind:value={$displayName} />
-      <Button handleClick={() => console.log('save name')}>
-        <span class="material-icons md-light md-18 pr-1">save</span>Save
-      </Button>
+      <Button handleClick={() => console.log('save name')}>Save</Button>
       <p class="py-2 mt-4">Change Password</p>
       <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPassword} />
       <InputPwd
@@ -50,9 +48,7 @@
         name="confirmPassword"
         label="Re-enter New Password"
         bind:value={confirmPassword} />
-      <Button handleClick={() => console.log('save password')}>
-        <span class="material-icons md-light md-18 pr-1">save</span>Save
-      </Button>
+      <Button disabled handleClick={() => console.log('save password')}>Save</Button>
     </div>
   </div>
 </div>
