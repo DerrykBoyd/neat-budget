@@ -4,6 +4,7 @@
   export let label;
   export let name = "";
   export let value = "";
+  export let disabled = false;
 </script>
 
 <style>
@@ -14,6 +15,7 @@
 <input
   type="password"
   {name}
+  {disabled}
   id={name}
   {autocomplete}
   bind:value
