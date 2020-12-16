@@ -2,7 +2,7 @@
   import { currentPath } from "store/currentPath";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
-  export let location;
+
   currentPath.set("/settings");
   let loggedIn = localStorage.getItem("loggedIn") === "true";
   onMount(() => {

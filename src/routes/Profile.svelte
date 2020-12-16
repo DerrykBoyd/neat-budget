@@ -8,7 +8,6 @@
   import { displayName, photoURL } from "../store/user";
   import { auth, db } from "../utils/firebase";
 
-  export let location;
   export let newPassword = "";
   export let confirmPassword = "";
 

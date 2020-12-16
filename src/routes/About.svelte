@@ -1,6 +1,6 @@
 <script>
   import { currentPath } from "store/currentPath";
-  export let location;
+
   currentPath.set("/about");
 </script>
 
