@@ -6,14 +6,31 @@
   import Input from "../components/Base/Input.svelte";
   import InputPwd from "../components/Base/InputPwd.svelte";
   import { displayName, photoURL } from "../store/user";
+  import { auth, db } from "../utils/firebase";
+
   export let location;
   export let newPassword = "";
   export let confirmPassword = "";
+
   currentPath.set("/profile");
   let loggedIn = localStorage.getItem("loggedIn") === "true";
   onMount(() => {
     if (!loggedIn) navigate("/");
   });
+
+  async function updateDisplayName(e) {
+    console.log("send " + $displayName);
+    let userId = auth.currentUser.uid;
+    let userRef = db.collection("users").doc(userId);
+    return userRef
+      .update({
+        displayName: $displayName,
+      })
+      .then(() => console.log("Display Name Updated"))
+      .catch((e) => {
+        console.error("Error updating displayName: " + e);
+      });
+  }
 </script>
 
 <style>
@@ -40,7 +57,7 @@
     </div>
     <div class="profile-settings w-full sm:w-60">
       <Input autocomplete="name" name="displayName" label="Display Name" bind:value={$displayName} />
-      <Button handleClick={() => console.log('save name')}>Save</Button>
+      <Button handleClick={updateDisplayName}>Save</Button>
       <p class="py-2 mt-4">Change Password</p>
       <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPassword} />
       <InputPwd
