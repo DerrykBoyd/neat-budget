@@ -40,7 +40,7 @@
       <p>Todo User Settings - Change Profile Photo</p>
     </li>
     <li class="p-2">
-      <p>Todo User Settings - Change Display Name</p>
+      <p class="line-through">Todo User Settings - Change Display Name</p>
     </li>
     <li class="p-2">
       <p>Todo add some data</p>

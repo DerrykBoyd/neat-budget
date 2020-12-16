@@ -7,9 +7,6 @@ auth.onAuthStateChanged((newUser) => {
   if (newUser) {
     localStorage.setItem("loggedIn", "true");
     loadingUser.set(true);
-    displayName.set(newUser.displayName);
-    photoURL.set(newUser.photoURL);
-    userEmail.set(newUser.email);
     updateUser = db
       .collection("users")
       .doc(newUser.uid)
