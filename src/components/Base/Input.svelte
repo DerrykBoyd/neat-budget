@@ -5,6 +5,7 @@
   export let name = "";
   export let placeholder = "";
   export let value = "";
+  export let disabled = false;
 </script>
 
 <style>
@@ -15,8 +16,9 @@
 <input
   type="text"
   {name}
+  {disabled}
   id={name}
   {autocomplete}
   {placeholder}
   bind:value
-  class="mt-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+  class={`${disabled ? 'opacity-40' : ''} mt-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md`} />
