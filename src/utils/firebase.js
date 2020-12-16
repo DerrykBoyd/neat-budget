@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/functions";
 import * as firebaseui from "firebaseui";
 
 const config = {
@@ -17,6 +18,7 @@ firebase.initializeApp(config);
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
+export const functions = firebase.functions();
 
 export const ui = new firebaseui.auth.AuthUI(auth);
 export const uiConfig = {

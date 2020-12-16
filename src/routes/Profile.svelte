@@ -6,10 +6,11 @@
   import Input from "../components/Base/Input.svelte";
   import InputPwd from "../components/Base/InputPwd.svelte";
   import { displayName, photoURL } from "../store/user";
-  import { auth, db } from "../utils/firebase";
+  import { auth, db, functions } from "../utils/firebase";
 
   export let newPassword = "";
   export let confirmPassword = "";
+  export let uploadingProfile = false;
 
   currentPath.set("/profile");
   let loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -31,6 +32,14 @@
         // TODO add error feedback
       });
   }
+  async function uploadProfileImg() {
+    uploadingProfile = true;
+    let profileImgFunction = functions.httpsCallable("saveProfileImg");
+    profileImgFunction({ message: "hi there" })
+      .then((res) => console.log(res.data))
+      .catch((e) => console.error(e))
+      .finally(() => (uploadingProfile = false));
+  }
 </script>
 
 <style>
@@ -49,11 +58,15 @@
       {#if $photoURL}
         <img class="object-cover" src={$photoURL} alt="profile" />
       {:else}<img class="w-16 h-16" src="images/placeholder-profile-img.svg" alt="placeholder-profile" />{/if}
-      <div
-        class="add-photo-btn cursor-pointer rounded-full w-9 h-9 bg-green-600 absolute right-0 bottom-0 shadow flex justify-center items-center"
-        on:click={() => console.log('Adding a profile photo')}>
-        <span class="cam-icon material-icons md-light">add_a_photo</span>
-      </div>
+      {#if !uploadingProfile}
+        <div
+          class="add-photo-btn cursor-pointer rounded-full w-9 h-9 bg-green-600 absolute right-0 bottom-0 shadow flex justify-center items-center"
+          on:click={uploadProfileImg}>
+          <span class="cam-icon material-icons md-light">add_a_photo</span>
+        </div>
+      {:else}
+        <div class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
+      {/if}
     </div>
     <div class="profile-settings w-full sm:w-60">
       <Input autocomplete="name" name="displayName" label="Display Name" bind:value={$displayName} />
