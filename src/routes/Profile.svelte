@@ -34,11 +34,21 @@
   }
   async function uploadProfileImg() {
     uploadingProfile = true;
-    let profileImgFunction = functions.httpsCallable("saveProfileImg");
-    profileImgFunction({ message: "hi there" })
-      .then((res) => console.log(res.data))
-      .catch((e) => console.error(e))
-      .finally(() => (uploadingProfile = false));
+    // let profileImgFunction = functions.httpsCallable("saveProfileImg");
+    // profileImgFunction({ message: "hi there" })
+    //   .then((res) => console.log(res.data))
+    //   .catch((e) => console.error(e))
+    //   .finally(() => (uploadingProfile = false));
+    let profileInput = document.getElementById("profile-upload");
+    profileInput.addEventListener("change", (e) => {
+      console.log(e);
+      uploadingProfile = false;
+      // TODO get file from filereader
+      // TODO write image to canvas on modal and crop
+      // save cropped image to firebase
+      // set url of profile in user db
+    });
+    profileInput.click();
   }
 </script>
 
@@ -81,4 +91,5 @@
       <Button disabled handleClick={() => console.log('save password')}>Save</Button>
     </div>
   </div>
+  <input id="profile-upload" class="hidden" type="file" accept="image/jpg, image/png" />
 </div>
