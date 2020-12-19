@@ -28,7 +28,7 @@
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-headline">
-        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 min-h-32">
           <slot />
         </div>
         {#if $$slots.actions}

@@ -24,7 +24,10 @@
   });
 
   const toggleModal = () => {
-    if (showModal) modalLoaded.set(false);
+    if ($showModal) {
+      modalLoaded.set(false);
+      cropSrc.set("");
+    }
     $showModal ? showModal.set(false) : showModal.set(true);
   };
 
@@ -48,7 +51,7 @@
   //   cropImg.onload = () => cropImgLoaded.set(true);
   // }
 
-  $: if ($cropImg) {
+  $: if ($cropImg?.src) {
     const cropper = new Cropper($cropImg, {
       aspectRatio: 1 / 1,
       viewMode: 2,
@@ -59,25 +62,34 @@
   }
 
   async function uploadProfileImg() {
-    toggleModal();
+    // Firebase function - same image to storage here and update photoURL
     // let profileImgFunction = functions.httpsCallable("saveProfileImg");
     // profileImgFunction({ message: "hi there" })
     //   .then((res) => console.log(res.data))
     //   .catch((e) => console.error(e))
     //   .finally(() => (uploadingProfile = false));
-    // let profileInput = document.getElementById("profile-upload");
-    // profileInput.addEventListener("change", (e) => {
-    //   uploadingProfile = true;
-    //   console.log(e);
-    //   setTimeout(() => {
-    //     uploadingProfile = false;
-    //   }, 2000);
-    //   // TODO get file from filereader
-    //   // TODO write image to canvas on modal and crop
-    //   // save cropped image to firebase
-    //   // set url of profile in user db
-    // });
-    // profileInput.click();
+
+    let profileInput = document.getElementById("profile-upload");
+    profileInput.addEventListener("change", async (e) => {
+      // If we are here the user has selected a file
+      if (!$showModal) showModal.set(true);
+      uploadingProfile = true;
+      if (profileInput?.files[0]) {
+        // file selected
+        const reader = new FileReader();
+        reader.onload = () => {
+          cropSrc.set(reader.result);
+        };
+        reader.readAsDataURL(profileInput.files[0]);
+      }
+      uploadingProfile = false;
+      // TODO get file from filereader
+      // TODO write image to canvas on modal and crop
+      // save cropped image to firebase
+      // set url of profile in user db
+    });
+    profileInput.click();
+    uploadingProfile = false;
   }
 </script>
 
@@ -95,7 +107,9 @@
 </style>
 
 <Modal>
-  <div><img id="image" bind:this={$cropImg} src={$cropSrc} alt="cropper" /></div>
+  <div>
+    {#if $cropSrc}<img id="image" bind:this={$cropImg} src={$cropSrc} alt="cropper" />{/if}
+  </div>
   <div slot="actions">
     <Button handleClick={toggleModal} color="grey">Cancel</Button>
     <Button color="green">Upload</Button>
@@ -131,5 +145,5 @@
       <Button disabled handleClick={() => console.log('save password')}>Save</Button>
     </div>
   </div>
-  <input id="profile-upload" class="hidden" type="file" accept="image/jpg, image/png" />
 </div>
+<input id="profile-upload" class="hidden" type="file" accept="image/jpg, image/png" />
