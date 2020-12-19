@@ -2,10 +2,15 @@
   import { currentPath } from "store/currentPath";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
+  import Cropper from "cropperjs";
+  import "cropperjs/dist/cropper.css";
   import Button from "../components/Base/Button.svelte";
   import Input from "../components/Base/Input.svelte";
   import InputPwd from "../components/Base/InputPwd.svelte";
+  import Modal from "../components/Base/Modal.svelte";
   import { displayName, photoURL } from "../store/user";
+  import { cropSrc, cropImg, cropImgLoaded } from "../store/profile";
+  import { modalLoaded, showModal } from "../store/modal";
   import { auth, db, functions } from "../utils/firebase";
 
   export let newPassword = "";
@@ -17,6 +22,11 @@
   onMount(() => {
     if (!loggedIn) navigate("/");
   });
+
+  const toggleModal = () => {
+    if (showModal) modalLoaded.set(false);
+    $showModal ? showModal.set(false) : showModal.set(true);
+  };
 
   async function updateDisplayName(e) {
     console.log("send " + $displayName);
@@ -32,23 +42,42 @@
         // TODO add error feedback
       });
   }
+
+  // $: if ($cropImg) {
+  //   debugger;
+  //   cropImg.onload = () => cropImgLoaded.set(true);
+  // }
+
+  $: if ($cropImg) {
+    const cropper = new Cropper($cropImg, {
+      aspectRatio: 1 / 1,
+      viewMode: 2,
+      crop(e) {
+        console.log(e);
+      },
+    });
+  }
+
   async function uploadProfileImg() {
-    uploadingProfile = true;
+    toggleModal();
     // let profileImgFunction = functions.httpsCallable("saveProfileImg");
     // profileImgFunction({ message: "hi there" })
     //   .then((res) => console.log(res.data))
     //   .catch((e) => console.error(e))
     //   .finally(() => (uploadingProfile = false));
-    let profileInput = document.getElementById("profile-upload");
-    profileInput.addEventListener("change", (e) => {
-      console.log(e);
-      uploadingProfile = false;
-      // TODO get file from filereader
-      // TODO write image to canvas on modal and crop
-      // save cropped image to firebase
-      // set url of profile in user db
-    });
-    profileInput.click();
+    // let profileInput = document.getElementById("profile-upload");
+    // profileInput.addEventListener("change", (e) => {
+    //   uploadingProfile = true;
+    //   console.log(e);
+    //   setTimeout(() => {
+    //     uploadingProfile = false;
+    //   }, 2000);
+    //   // TODO get file from filereader
+    //   // TODO write image to canvas on modal and crop
+    //   // save cropped image to firebase
+    //   // set url of profile in user db
+    // });
+    // profileInput.click();
   }
 </script>
 
@@ -59,8 +88,19 @@
   .add-photo-btn {
     transform: translate(4px, 4px);
   }
+  #image {
+    display: block;
+    max-width: 100%;
+  }
 </style>
 
+<Modal>
+  <div><img id="image" bind:this={$cropImg} src={$cropSrc} alt="cropper" /></div>
+  <div slot="actions">
+    <Button handleClick={toggleModal} color="grey">Cancel</Button>
+    <Button color="green">Upload</Button>
+  </div>
+</Modal>
 <div class="flex flex-col items-center justify-center">
   <h1 class="text-2xl text-green-800">PROFILE</h1>
   <div class="profile-image flex flex-wrap justify-center m-4">
