@@ -1,6 +1,5 @@
 <script>
   import { fade } from "svelte/transition";
-  import Button from "./Button.svelte";
   import { modalLoaded, showModal } from "../../store/modal";
 </script>
 

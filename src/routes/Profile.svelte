@@ -9,9 +9,9 @@
   import InputPwd from "../components/Base/InputPwd.svelte";
   import Modal from "../components/Base/Modal.svelte";
   import { displayName, photoURL } from "../store/user";
-  import { cropSrc, cropImg, cropImgLoaded } from "../store/profile";
+  import { cropSrc, cropImg } from "../store/profile";
   import { modalLoaded, showModal } from "../store/modal";
-  import { auth, db, functions } from "../utils/firebase";
+  import { auth, db, functions, storage } from "../utils/firebase";
 
   export let newPassword = "";
   export let confirmPassword = "";
@@ -46,50 +46,67 @@
       });
   }
 
-  // $: if ($cropImg) {
-  //   debugger;
-  //   cropImg.onload = () => cropImgLoaded.set(true);
-  // }
-
+  // load the cropper when the img src is set
   $: if ($cropImg?.src) {
-    const cropper = new Cropper($cropImg, {
+    let cropper = new Cropper($cropImg, {
       aspectRatio: 1 / 1,
       viewMode: 2,
-      crop(e) {
-        console.log(e);
+      ready() {
+        // save the image when the user clicks upload
+        let uploadBtn = document.getElementById("upload-button");
+        uploadBtn.addEventListener("click", (e) => {
+          // TODO set loading state here
+          let profileImgFunction = functions.httpsCallable("saveProfileImg");
+          const { imageData, cropBoxData } = cropper;
+          profileImgFunction({ imageData, cropBoxData, profileImg: $cropSrc })
+            .then((res) => {
+              let fileName = res.data?.name;
+              if (fileName) {
+                storage
+                  .ref(fileName)
+                  .getDownloadURL()
+                  .then((url) => {
+                    photoURL.set(url);
+                    db.collection("users")
+                      .doc(auth.currentUser.uid)
+                      .update({
+                        photoURL: url,
+                      })
+                      .then(() => console.log("Profile photo updated"))
+                      .catch((e) => console.log(e));
+                  });
+              }
+            })
+            .catch((e) => console.error(e))
+            .finally(() => {
+              // TODO set not loading state here
+              uploadingProfile = false;
+              showModal.set(false);
+              cropSrc.set(null);
+            });
+        });
       },
     });
   }
 
   async function uploadProfileImg() {
-    // Firebase function - same image to storage here and update photoURL
-    // let profileImgFunction = functions.httpsCallable("saveProfileImg");
-    // profileImgFunction({ message: "hi there" })
-    //   .then((res) => console.log(res.data))
-    //   .catch((e) => console.error(e))
-    //   .finally(() => (uploadingProfile = false));
-
     let profileInput = document.getElementById("profile-upload");
     profileInput.addEventListener("change", async (e) => {
       // If we are here the user has selected a file
       if (!$showModal) showModal.set(true);
-      uploadingProfile = true;
       if (profileInput?.files[0]) {
-        // file selected
         const reader = new FileReader();
         reader.onload = () => {
+          // TODO - Limit file size accepted
+          // once the file data is set, the cropper will load
           cropSrc.set(reader.result);
         };
         reader.readAsDataURL(profileInput.files[0]);
       }
       uploadingProfile = false;
-      // TODO get file from filereader
-      // TODO write image to canvas on modal and crop
-      // save cropped image to firebase
-      // set url of profile in user db
     });
+    // open the file picker
     profileInput.click();
-    uploadingProfile = false;
   }
 </script>
 
@@ -112,7 +129,7 @@
   </div>
   <div slot="actions">
     <Button handleClick={toggleModal} color="grey">Cancel</Button>
-    <Button color="green">Upload</Button>
+    <Button id="upload-button" color="green">Upload</Button>
   </div>
 </Modal>
 <div class="flex flex-col items-center justify-center">
@@ -120,8 +137,10 @@
   <div class="profile-image flex flex-wrap justify-center m-4">
     <div class="mx-12 my-4 w-24 h-24 bg-gray-100 rounded-full flex justify-center items-center shadow relative">
       {#if $photoURL}
-        <img class="object-cover" src={$photoURL} alt="profile" />
-      {:else}<img class="w-16 h-16" src="images/placeholder-profile-img.svg" alt="placeholder-profile" />{/if}
+        <img class="object-cover rounded-full" src={$photoURL} alt="profile" />
+      {:else}
+        <img class="w-16 h-16 rounded-full" src="images/placeholder-profile-img.svg" alt="placeholder-profile" />
+      {/if}
       {#if !uploadingProfile}
         <div
           class="add-photo-btn cursor-pointer rounded-full w-9 h-9 bg-green-600 absolute right-0 bottom-0 shadow flex justify-center items-center"

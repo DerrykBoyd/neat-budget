@@ -1,7 +1,7 @@
 <script>
   import { green } from "../../utils/colorVars";
   export let id = "";
-  export let handleClick = () => console.log("Clicked");
+  export let handleClick = null;
   export let disabled = false;
   export let color = "green";
 

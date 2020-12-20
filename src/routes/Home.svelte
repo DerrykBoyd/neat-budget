@@ -37,7 +37,10 @@
       <p class="line-through">Todo User Settings - Change Display Name</p>
     </li>
     <li class="p-2">
-      <p>Todo User Settings - Change Profile Photo</p>
+      <p class="line-through">Todo User Settings - Change Profile Photo</p>
+    </li>
+    <li class="p-2">
+      <p class="">Todo User Settings - Add uploading feedback when saving photo</p>
     </li>
     <li class="p-2">
       <p>Todo User Settings - Change Password</p>
