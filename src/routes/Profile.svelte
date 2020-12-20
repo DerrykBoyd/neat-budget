@@ -2,6 +2,7 @@
   import { currentPath } from "store/currentPath";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
+  import { fade } from "svelte/transition";
   import Cropper from "cropperjs";
   import "cropperjs/dist/cropper.css";
   import Button from "../components/Base/Button.svelte";
@@ -13,10 +14,15 @@
   import { modalLoaded, showModal } from "../store/modal";
   import { auth, db, functions, storage } from "../utils/firebase";
   import Loader from "../components/Base/Loader.svelte";
+  import InfoMessage from "../components/Base/InfoMessage.svelte";
 
   export let newPassword = "";
   export let confirmPassword = "";
   export let uploadingProfile = false;
+
+  let nameChangePending = false;
+  let nameChangeSuccess = null; // null -> true for testing
+  let nameChangeError = null;
 
   currentPath.set("/profile");
   let loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -32,18 +38,30 @@
     $showModal ? showModal.set(false) : showModal.set(true);
   };
 
-  async function updateDisplayName(e) {
-    console.log("send " + $displayName);
+  async function updateDisplayName() {
+    nameChangePending = true;
     let userId = auth.currentUser.uid;
     let userRef = db.collection("users").doc(userId);
-    return userRef
+    userRef
       .update({
         displayName: $displayName,
       })
-      .then(() => console.log("Display Name Updated")) // TODO - Add saved feedback
+      .then(() => {
+        console.log("Display Name Updated");
+        nameChangeSuccess = true;
+        setTimeout(() => {
+          nameChangeSuccess = null;
+        }, 1000);
+      })
       .catch((e) => {
         console.error("Error updating displayName: " + e);
-        // TODO add error feedback
+        nameChangeError = true;
+        setTimeout(() => {
+          nameChangeError = null;
+        }, 1000);
+      })
+      .finally(() => {
+        nameChangePending = false;
       });
   }
 
@@ -157,9 +175,17 @@
         <div class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
       {/if}
     </div>
-    <div class="profile-settings w-full sm:w-60">
+    <div class="profile-settings w-full sm:w-96">
       <Input autocomplete="name" name="displayName" label="Display Name" bind:value={$displayName} />
-      <Button handleClick={updateDisplayName}>Save</Button>
+      <div class="flex items-center">
+        <Button disabled={nameChangePending} handleClick={updateDisplayName}>Save</Button>
+        {#if nameChangeSuccess}
+          <InfoMessage icon="cloud_done">Saved</InfoMessage>
+        {/if}
+        {#if nameChangeError}
+          <InfoMessage icon="error" color="red-600">Error updating dispaly name</InfoMessage>
+        {/if}
+      </div>
       <p class="py-2 mt-4">Change Password</p>
       <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPassword} />
       <InputPwd
