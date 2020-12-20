@@ -16,13 +16,16 @@
   import Loader from "../components/Base/Loader.svelte";
   import InfoMessage from "../components/Base/InfoMessage.svelte";
 
-  export let newPassword = "";
-  export let confirmPassword = "";
-  export let uploadingProfile = false;
-
+  // Component State
+  let uploadingProfile = false;
   let nameChangePending = false;
   let nameChangeSuccess = null; // null -> true for testing
   let nameChangeError = null;
+  let newPassword = "";
+  let showNewPassword = false;
+  let newPasswordConfirm = "";
+  let showNewPasswordConfirm = false;
+  let newPasswordError = "Passwords do not match";
 
   currentPath.set("/profile");
   let loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -36,6 +39,10 @@
       cropSrc.set("");
     }
     $showModal ? showModal.set(false) : showModal.set(true);
+  };
+
+  const toggleShowNewPassword = () => {
+    showNewPassword ? (showNewPassword = false) : (showNewPassword = true);
   };
 
   async function updateDisplayName() {
@@ -63,6 +70,25 @@
       .finally(() => {
         nameChangePending = false;
       });
+  }
+
+  async function uploadProfileImg() {
+    let profileInput = document.getElementById("profile-upload");
+    profileInput.addEventListener("change", async (e) => {
+      // If we are here the user has selected a file
+      if (!$showModal) showModal.set(true);
+      if (profileInput?.files[0]) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          // TODO - Limit file size accepted
+          // once the file data is set, the cropper will load
+          cropSrc.set(reader.result);
+        };
+        reader.readAsDataURL(profileInput.files[0]);
+      }
+    });
+    // open the file picker
+    profileInput.click();
   }
 
   // load the cropper when the img src is set
@@ -107,25 +133,6 @@
         });
       },
     });
-  }
-
-  async function uploadProfileImg() {
-    let profileInput = document.getElementById("profile-upload");
-    profileInput.addEventListener("change", async (e) => {
-      // If we are here the user has selected a file
-      if (!$showModal) showModal.set(true);
-      if (profileInput?.files[0]) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          // TODO - Limit file size accepted
-          // once the file data is set, the cropper will load
-          cropSrc.set(reader.result);
-        };
-        reader.readAsDataURL(profileInput.files[0]);
-      }
-    });
-    // open the file picker
-    profileInput.click();
   }
 </script>
 
@@ -187,12 +194,12 @@
         {/if}
       </div>
       <p class="py-2 mt-4">Change Password</p>
+      <!-- {#if !showNewPassword} -->
       <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPassword} />
-      <InputPwd
-        autocomplete="new-password"
-        name="confirmPassword"
-        label="Re-enter New Password"
-        bind:value={confirmPassword} />
+      <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPasswordConfirm} />
+      {#if newPasswordError}
+        <InfoMessage icon="error" color="red-800">{newPasswordError}</InfoMessage>
+      {/if}
       <Button disabled handleClick={() => console.log('save password')}>Save</Button>
     </div>
   </div>
