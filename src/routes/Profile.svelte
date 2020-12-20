@@ -12,6 +12,7 @@
   import { cropSrc, cropImg } from "../store/profile";
   import { modalLoaded, showModal } from "../store/modal";
   import { auth, db, functions, storage } from "../utils/firebase";
+  import Loader from "../components/Base/Loader.svelte";
 
   export let newPassword = "";
   export let confirmPassword = "";
@@ -56,6 +57,7 @@
         let uploadBtn = document.getElementById("upload-button");
         uploadBtn.addEventListener("click", (e) => {
           // TODO set loading state here
+          uploadingProfile = true;
           let profileImgFunction = functions.httpsCallable("saveProfileImg");
           const { imageData, cropBoxData } = cropper;
           profileImgFunction({ imageData, cropBoxData, profileImg: $cropSrc })
@@ -103,7 +105,6 @@
         };
         reader.readAsDataURL(profileInput.files[0]);
       }
-      uploadingProfile = false;
     });
     // open the file picker
     profileInput.click();
@@ -127,7 +128,12 @@
   <div>
     {#if $cropSrc}<img id="image" bind:this={$cropImg} src={$cropSrc} alt="cropper" />{/if}
   </div>
-  <div slot="actions">
+  <div slot="actions" class="relative flex justify-end items-center">
+    {#if uploadingProfile}
+      <div class="absolute flex w-full h-full justify-center items-center bg-black opacity-40">
+        <Loader size="1.5rem" />
+      </div>
+    {/if}
     <Button handleClick={toggleModal} color="grey">Cancel</Button>
     <Button id="upload-button" color="green">Upload</Button>
   </div>

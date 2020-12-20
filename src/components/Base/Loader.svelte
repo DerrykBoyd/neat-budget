@@ -40,11 +40,8 @@
   }
 </style>
 
-<div class="flex items-center justify-center">
-  <svg
-    style="--size: {size}; --color: {color}"
-    class="spinner"
-    viewBox="0 0 50 50">
+<div style="color: {color}" class="flex flex-col items-center justify-center">
+  <svg style="--size: {size}; --color: {color}" class="spinner" viewBox="0 0 50 50">
     <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5" />
   </svg>
   {#if text}<span class="pl-2">{text}</span>{/if}

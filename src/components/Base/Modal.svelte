@@ -32,7 +32,7 @@
         </div>
         {#if $$slots.actions}
           <!-- content here -->
-          <div class="bg-gray-50 p-2 sm:px-4 flex flex-row-reverse">
+          <div class="bg-gray-50">
             <slot name="actions" />
           </div>
         {/if}
