@@ -9,23 +9,33 @@
   import Input from "../components/Base/Input.svelte";
   import InputPwd from "../components/Base/InputPwd.svelte";
   import Modal from "../components/Base/Modal.svelte";
-  import { displayName, photoURL } from "../store/user";
+  import { displayName, photoURL, providerData, userEmail } from "../store/user";
   import { cropSrc, cropImg } from "../store/profile";
   import { modalLoaded, showModal } from "../store/modal";
   import { auth, db, functions, storage } from "../utils/firebase";
   import Loader from "../components/Base/Loader.svelte";
   import InfoMessage from "../components/Base/InfoMessage.svelte";
+  import { validatePassword } from "utils/helpers";
 
   // Component State
-  let uploadingProfile = false;
-  let nameChangePending = false;
-  let nameChangeSuccess = null; // null -> true for testing
+  let uploadingProfile = null;
+  let newPasswordSavePending = null;
+  let newPasswordSaveSuccess = null;
+  let newPasswordSaveError = null;
+  let nameChangePending = null;
+  let nameChangeSuccess = null;
   let nameChangeError = null;
+  let currentPassword = "";
+  let currentPasswordError = "";
   let newPassword = "";
-  let showNewPassword = false;
   let newPasswordConfirm = "";
-  let showNewPasswordConfirm = false;
-  let newPasswordError = "Passwords do not match";
+  let newPasswordError = "";
+  let userHasPassword = null;
+
+  // check if user signed in with password
+  $: if ($providerData.length) {
+    if ($providerData.findIndex((el) => el.providerId === "password") !== -1) userHasPassword = true;
+  }
 
   currentPath.set("/profile");
   let loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -41,9 +51,56 @@
     $showModal ? showModal.set(false) : showModal.set(true);
   };
 
-  const toggleShowNewPassword = () => {
-    showNewPassword ? (showNewPassword = false) : (showNewPassword = true);
-  };
+  async function saveNewPassword() {
+    newPasswordError = "";
+    currentPasswordError = "";
+    if (newPassword !== newPasswordConfirm) {
+      newPasswordError = "Passwords do not match";
+      return;
+    }
+    let validateError = validatePassword(newPassword);
+    if (validateError) {
+      newPasswordError = validateError;
+      return;
+    }
+    // if here passwords match and more than 8 characters
+    newPasswordSavePending = true;
+    //sign in again with current password
+    await auth
+      .signInWithEmailAndPassword($userEmail, currentPassword)
+      .then(() => {
+        auth.currentUser
+          .updatePassword(newPassword)
+          .then(() => {
+            newPasswordSaveSuccess = true;
+            setTimeout(() => {
+              newPasswordSaveSuccess = null;
+            }, 2000);
+          })
+          .catch((e) => {
+            newPasswordSaveError = true;
+            setTimeout(() => {
+              newPasswordSaveError = null;
+            }, 2000);
+            console.error(e);
+          });
+      })
+      .catch((e) => {
+        if (e.code === "auth/wrong-password") currentPasswordError = "Invalid Password";
+        else {
+          newPasswordSaveError = true;
+          setTimeout(() => {
+            newPasswordSaveError = null;
+          }, 2000);
+        }
+        console.error(e);
+      });
+    // reset state
+    currentPassword = "";
+    newPassword = "";
+    newPasswordConfirm = "";
+    newPasswordSavePending = false;
+  }
 
   async function updateDisplayName() {
     nameChangePending = true;
@@ -193,14 +250,40 @@
           <InfoMessage icon="error" color="red-600">Error updating dispaly name</InfoMessage>
         {/if}
       </div>
-      <p class="py-2 mt-4">Change Password</p>
-      <!-- {#if !showNewPassword} -->
-      <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPassword} />
-      <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPasswordConfirm} />
-      {#if newPasswordError}
-        <InfoMessage icon="error" color="red-800">{newPasswordError}</InfoMessage>
+      {#if userHasPassword}
+        <p class="py-2 mt-4">Change Password</p>
+
+        <InputPwd
+          autocomplete="current-password"
+          name="currentPassword"
+          label="Current Password"
+          bind:value={currentPassword} />
+        {#if currentPasswordError === 'Invalid Password'}
+          <InfoMessage icon="error" color="red-600">{currentPasswordError}</InfoMessage>
+        {/if}
+        <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPassword} />
+        <InputPwd
+          autocomplete="new-password"
+          name="confirmNewPassword"
+          label="Confirm New Password"
+          bind:value={newPasswordConfirm} />
+        {#if newPasswordError}
+          <InfoMessage icon="error" color="red-800">{newPasswordError}</InfoMessage>
+        {/if}
+        <div class="flex items-center">
+          <Button
+            disabled={!newPassword || !newPasswordConfirm || !currentPassword || newPasswordSavePending}
+            handleClick={saveNewPassword}>
+            Save
+          </Button>
+          {#if newPasswordSaveSuccess}
+            <InfoMessage icon="cloud_done">Password Changed</InfoMessage>
+          {/if}
+          {#if newPasswordSaveError}
+            <InfoMessage icon="error" color="red-600">Error Saving Password</InfoMessage>
+          {/if}
+        </div>
       {/if}
-      <Button disabled handleClick={() => console.log('save password')}>Save</Button>
     </div>
   </div>
 </div>

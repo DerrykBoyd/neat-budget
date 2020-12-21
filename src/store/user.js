@@ -15,8 +15,9 @@ auth.onAuthStateChanged((newUser) => {
           if (doc.exists) {
             let user = doc.data();
             displayName.set(user.displayName);
-            photoURL.set(user.photoURL);
+            photoURL.set(user.photoURL || newUser.photoURL || "");
             userEmail.set(user.email);
+            providerData.set(user.providerData || newUser.providerData);
             loadingUser.set(false);
             console.log("User fetched from db");
           } else {
@@ -28,6 +29,7 @@ auth.onAuthStateChanged((newUser) => {
                 displayName: newUser.displayName,
                 photoURL: newUser.photoURL,
                 uid: newUser.uid,
+                providerData: newUser.providerData,
               })
               .then(console.log("User added to db"));
           }
@@ -50,3 +52,4 @@ export const displayName = writable(null);
 export const photoURL = writable(null);
 export const userEmail = writable(null);
 export const loadingUser = writable(false);
+export const providerData = writable([]);

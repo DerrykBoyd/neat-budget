@@ -37,7 +37,7 @@
   {id}
   {disabled}
   on:click={handleClick}
-  class={`${disabled ? 'opacity-30 pointer-events-none' : 'opacity-100'} hover:bg-${hoverColor} text-${textColor}  m-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium bg-${bgColor} focus:outline-none`}>
+  class={`${disabled ? 'opacity-30 pointer-events-none' : 'opacity-100'} hover:bg-${hoverColor} text-${textColor}  my-2 mr-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium bg-${bgColor} focus:outline-none`}>
   <slot name="icon" />
   <slot />
 </button>
