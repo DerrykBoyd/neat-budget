@@ -18,6 +18,7 @@
   import { validatePassword } from "utils/helpers";
 
   // Component State
+  let imageError = "";
   let uploadingProfile = null;
   let newPasswordSavePending = null;
   let newPasswordSaveSuccess = null;
@@ -133,15 +134,25 @@
     let profileInput = document.getElementById("profile-upload");
     profileInput.addEventListener("change", async (e) => {
       // If we are here the user has selected a file
-      if (!$showModal) showModal.set(true);
-      if (profileInput?.files[0]) {
+      let file = profileInput?.files[0];
+      if (file) {
+        // validate type and size
+        if (file.type !== "image/jpeg" || file.type !== "image/png") {
+          imageError = "File must be jpeg or png";
+          return;
+        }
+        if (file.size > 5 * Math.pow(10, 6)) {
+          imageError = "File size must be less than 5MB";
+          return;
+        }
+        if (!$showModal) showModal.set(true);
         const reader = new FileReader();
         reader.onload = () => {
-          // TODO - Limit file size accepted
           // once the file data is set, the cropper will load
           cropSrc.set(reader.result);
+          imageError = "";
         };
-        reader.readAsDataURL(profileInput.files[0]);
+        reader.readAsDataURL(file);
       }
     });
     // open the file picker
@@ -157,7 +168,6 @@
         // save the image when the user clicks upload
         let uploadBtn = document.getElementById("upload-button");
         uploadBtn.addEventListener("click", (e) => {
-          // TODO set loading state here
           uploadingProfile = true;
           let profileImgFunction = functions.httpsCallable("saveProfileImg");
           const { imageData, cropBoxData } = cropper;
@@ -182,7 +192,6 @@
             })
             .catch((e) => console.error(e))
             .finally(() => {
-              // TODO set not loading state here
               uploadingProfile = false;
               showModal.set(false);
               cropSrc.set(null);
@@ -223,20 +232,25 @@
 <div class="flex flex-col items-center justify-center">
   <h1 class="text-2xl text-green-800">PROFILE</h1>
   <div class="profile-image flex flex-wrap justify-center m-4">
-    <div class="mx-12 my-4 w-24 h-24 bg-gray-100 rounded-full flex justify-center items-center shadow relative">
-      {#if $photoURL}
-        <img class="object-cover rounded-full" src={$photoURL} alt="profile" />
-      {:else}
-        <img class="w-16 h-16 rounded-full" src="images/placeholder-profile-img.svg" alt="placeholder-profile" />
-      {/if}
-      {#if !uploadingProfile}
-        <div
-          class="add-photo-btn cursor-pointer rounded-full w-9 h-9 bg-green-600 absolute right-0 bottom-0 shadow flex justify-center items-center"
-          on:click={uploadProfileImg}>
-          <span class="cam-icon material-icons md-light">add_a_photo</span>
-        </div>
-      {:else}
-        <div class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
+    <div class="flex flex-col items-center">
+      <div class="mx-12 my-4 w-24 h-24 bg-gray-100 rounded-full flex justify-center items-center shadow relative">
+        {#if $photoURL}
+          <img class="object-cover rounded-full" src={$photoURL} alt="profile" />
+        {:else}
+          <img class="w-16 h-16 rounded-full" src="images/placeholder-profile-img.svg" alt="placeholder-profile" />
+        {/if}
+        {#if !uploadingProfile}
+          <div
+            class="add-photo-btn cursor-pointer rounded-full w-9 h-9 bg-green-600 absolute right-0 bottom-0 shadow flex justify-center items-center"
+            on:click={uploadProfileImg}>
+            <span class="cam-icon material-icons md-light">add_a_photo</span>
+          </div>
+        {:else}
+          <div class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
+        {/if}
+      </div>
+      {#if imageError}
+        <InfoMessage icon="error" color="red-600">{imageError}</InfoMessage>
       {/if}
     </div>
     <div class="profile-settings w-full sm:w-96">

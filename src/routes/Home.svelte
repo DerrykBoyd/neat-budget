@@ -46,7 +46,7 @@
       <p class="line-through">Todo User Settings - Add saving feedback when saving display name</p>
     </li>
     <li class="p-2">
-      <p>Todo User Settings - Change Password</p>
+      <p class="line-through">Todo User Settings - Change Password</p>
     </li>
     <li class="p-2">
       <p>Todo add some data</p>
