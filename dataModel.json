@@ -1,0 +1,140 @@
+{
+  "Users": {
+    "User": {
+      "uid": "string(uuid)",
+      "creationTime": "timeStamp",
+      "displayName": "string",
+      "email": "string",
+      "photoURL": "string",
+      "providerData": "array"
+    }
+  },
+  "Budgets": {
+    "Budget": {
+      "owner": "string(uid)",
+      "sharedWith": "array[string(uuid)]",
+      "id": "string(uuid)",
+      "name": "string",
+      "lastModified": "timeStamp",
+      "firstMonth": "timeStamp",
+      "currencyCode": "enum[list of currency codes]",
+      "Accounts": {
+        "arrayOfObjects": {
+          "id": "string(uuid)",
+          "name": "string",
+          "type": "enum[checking, savings, creditCard, lineOfCredit, otherAsset, otherLiability, investmentAccount, mortgage]",
+          "onBudget": "boolean",
+          "closed": "boolean",
+          "balance": "int",
+          "clearedBalance": "int",
+          "deleted": "boolean"
+        }
+      },
+      "Transactions": {
+        "Transaction": {
+          "id": "string(uuid)",
+          "date": "string(date)",
+          "amount": "int",
+          "note": "string",
+          "cleared": "enum[cleared, uncleared, reconciled]",
+          "approved": "boolean",
+          "accountId": "string(uuid)",
+          "accountName": "string",
+          "payeeId": "string(uuid)",
+          "payeeName": "string",
+          "categoryId": "string(uuid)",
+          "categoryName": "string",
+          "transferAccountId": "string(uuid)",
+          "transferAccountName": "string",
+          "deleted": "boolean",
+          "subTransactions": {
+            "arrayOfObjects": {
+              "id": "string(uuid)",
+              "amount": "int",
+              "note": "string",
+              "payeeId": "string(uuid)",
+              "payeeName": "string",
+              "categoryId": "string(uuid)",
+              "categoryName": "string",
+              "transferAccountId": "string(uuid)",
+              "transferAccountName": "string",
+              "deleted": "boolean"
+            }
+          }
+        }
+      },
+      "ScheduledTransactions": {
+        "ScheduledTransaction": {
+          "id": "string(uuid)",
+          "dateFirst": "string(date)",
+          "dateNext": "string(date)",
+          "frequency": "enum[once, daily, weekly, everyOtherWeek, twiceAMonth, every4Weeks, monthly, everyOtherMonth, every3Months, every4Months, twiceAYear, yearly",
+          "amount": "int",
+          "note": "string",
+          "accountId": "string(uuid)",
+          "accountName": "string",
+          "payeeId": "string(uuid)",
+          "payeeName": "string",
+          "categoryId": "string(uuid)",
+          "categoryName": "string",
+          "transferAccountId": "string(uuid)",
+          "transferAccountName": "string",
+          "deleted": "boolean",
+          "subTransactions": {
+            "arrayOfObjects": {
+              "id": "string(uuid)",
+              "amount": "int",
+              "note": "string",
+              "payeeId": "string(uuid)",
+              "payeeName": "string",
+              "categoryId": "string(uuid)",
+              "categoryName": "string",
+              "transferAccountId": "string(uuid)",
+              "transferAccountName": "string",
+              "deleted": "boolean"
+            }
+          }
+        }
+      },
+      "Payees": {
+        "Payee": {
+          "id": "string(uuid)",
+          "name": "string",
+          "lastCategory": "string",
+          "lastAccount": "string",
+          "deleted": "boolean"
+        }
+      },
+      "categoryGroups": {
+        "arrayOfObjects": {
+          "id": "string(uuid)",
+          "name": "string",
+          "hidden": "boolean",
+          "deleted": "boolean"
+        }
+      },
+      "categories": {
+        "arrayOfObjects": {
+          "id": "string(uuid)",
+          "categoryGroupId": "string(uuid)",
+          "name": "string",
+          "hidden": "boolean",
+          "note": "string",
+          "budgeted": "int",
+          "balance": "int",
+          "deleted": "boolean"
+        }
+      },
+      "Months": {
+        "Month": {
+          "month": "timeStamp",
+          "note": "string",
+          "income": "int",
+          "budgeted": "int",
+          "activity": "int",
+          "deleted": "boolean"
+        }
+      }
+    }
+  }
+}
