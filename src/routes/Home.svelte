@@ -2,26 +2,36 @@
   import { afterUpdate, onMount } from "svelte";
   import { currentPath } from "store/currentPath";
   import { userEmail, displayName, loadingUser } from "store/user";
+  import { budgets, createBudget } from "store/budgets";
   import { ui, uiConfig } from "utils/firebase";
+  import Loader from "../components/Base/Loader.svelte";
+  import Button from "../components/Base/Button.svelte";
 
-  let name = "Todo Budgeting App";
+  let name = "DB Budgeting App";
+  let loggedIn = localStorage.getItem("loggedIn") === "true";
   currentPath.set("/");
   onMount(() => {
     let queryString = new URLSearchParams(window.location.search);
     let hasLogin = queryString.has("login");
-    let loggedIn = localStorage.getItem("loggedIn") === "true";
+    loggedIn = localStorage.getItem("loggedIn") === "true";
     if (hasLogin || $loadingUser || loggedIn)
       document.getElementById("firebaseui-auth-container").style.display = "none";
   });
   afterUpdate(() => {
     let queryString = new URLSearchParams(window.location.search);
     let hasLogin = queryString.has("login");
-    let loggedIn = localStorage.getItem("loggedIn") === "true";
+    loggedIn = localStorage.getItem("loggedIn") === "true";
     if (!$userEmail?.email && !hasLogin && !loggedIn) {
       document.getElementById("firebaseui-auth-container").style.display = "";
       ui.start("#firebaseui-auth-container", uiConfig);
     } else ui.reset();
   });
+
+  let newBudget = createBudget();
+
+  function addBudget(newBudget) {
+    budgets.update((arr) => [...arr, newBudget]);
+  }
 </script>
 
 <style>
@@ -29,35 +39,22 @@
 
 <div class="home-content text-center">
   <h1 class="text-2xl text-green-800">{name}</h1>
-  <ol class="py-2">
-    <li class="p-2">
-      <p class="line-through">Todo add signin options</p>
-    </li>
-    <li class="p-2">
-      <p class="line-through">Todo User Settings - Change Display Name</p>
-    </li>
-    <li class="p-2">
-      <p class="line-through">Todo User Settings - Change Profile Photo</p>
-    </li>
-    <li class="p-2">
-      <p class="line-through">Todo User Settings - Add uploading feedback when saving photo</p>
-    </li>
-    <li class="p-2">
-      <p class="line-through">Todo User Settings - Add saving feedback when saving display name</p>
-    </li>
-    <li class="p-2">
-      <p class="line-through">Todo User Settings - Change Password</p>
-    </li>
-    <li class="p-2">
-      <p>Todo add some data</p>
-    </li>
-    <li class="p-2">
-      <p>Todo add brand colors</p>
-    </li>
-  </ol>
+  {#if loggedIn}
+    {#if !$displayName}
+      <Loader color="grey" />
+    {:else}
+      <div>Welcome {$displayName}</div>
+      {#if !$budgets.length}
+        <div>Looks like you don't have any budgets yet. Lets create one.</div>
+        <Button handleClick={() => addBudget(newBudget)}>Add Budget</Button>
+      {:else}
+        <div>{$budgets[0]}</div>
+      {/if}
+    {/if}
+  {:else}
+    <!-- Not logged in - show home page -->
+    <div>Home page to go here</div>
+  {/if}
   <div id="firebaseui-auth-container" />
   <div id="loader" />
-  {#if $displayName}
-    <p>DB User Logged In - {$displayName}, {$userEmail}</p>
-  {/if}
 </div>
