@@ -49,6 +49,9 @@ export default {
   plugins: [
     replace({
       _ENVIRONMENT: production ? "prod" : "dev",
+      "process.env.NODE_ENV": production
+        ? JSON.stringify("production")
+        : JSON.stringify("development"),
     }),
     includePaths(includePathOptions),
     svelte({

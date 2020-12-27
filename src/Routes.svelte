@@ -6,6 +6,8 @@
   import Settings from "routes/Settings";
   import { auth } from "utils/firebase";
   import Profile from "routes/Profile";
+  import MyBudgets from "./routes/MyBudgets.svelte";
+  import Budget from "./routes/Budget.svelte";
   export let url = "";
 </script>
 
@@ -18,5 +20,7 @@
     <Route path="about" component={About} />
     <Route path="settings" component={Settings} />
     <Route path="profile" component={Profile} />
+    <Route path="my-budgets" component={MyBudgets} />
+    <Route path="budget/:id" component={Budget} />
   </div>
 </Router>

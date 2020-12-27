@@ -30,39 +30,6 @@
           "deleted": "boolean"
         }
       },
-      "Transactions": {
-        "Transaction": {
-          "id": "string(uuid)",
-          "date": "string(date)",
-          "amount": "int",
-          "note": "string",
-          "cleared": "enum[cleared, uncleared, reconciled]",
-          "approved": "boolean",
-          "accountId": "string(uuid)",
-          "accountName": "string",
-          "payeeId": "string(uuid)",
-          "payeeName": "string",
-          "categoryId": "string(uuid)",
-          "categoryName": "string",
-          "transferAccountId": "string(uuid)",
-          "transferAccountName": "string",
-          "deleted": "boolean",
-          "subTransactions": {
-            "arrayOfObjects": {
-              "id": "string(uuid)",
-              "amount": "int",
-              "note": "string",
-              "payeeId": "string(uuid)",
-              "payeeName": "string",
-              "categoryId": "string(uuid)",
-              "categoryName": "string",
-              "transferAccountId": "string(uuid)",
-              "transferAccountName": "string",
-              "deleted": "boolean"
-            }
-          }
-        }
-      },
       "ScheduledTransactions": {
         "ScheduledTransaction": {
           "id": "string(uuid)",
@@ -97,7 +64,7 @@
         }
       },
       "Payees": {
-        "Payee": {
+        "arrayOfObjects": {
           "id": "string(uuid)",
           "name": "string",
           "lastCategory": "string",
@@ -132,7 +99,39 @@
           "income": "int",
           "budgeted": "int",
           "activity": "int",
-          "deleted": "boolean"
+          "deleted": "boolean",
+          "transactions": "arrayOfObjects(Transaction)"
+        }
+      },
+      "Transaction": {
+        "id": "string(uuid)",
+        "date": "string(date)",
+        "amount": "int",
+        "note": "string",
+        "cleared": "enum[cleared, uncleared, reconciled]",
+        "approved": "boolean",
+        "accountId": "string(uuid)",
+        "accountName": "string",
+        "payeeId": "string(uuid)",
+        "payeeName": "string",
+        "categoryId": "string(uuid)",
+        "categoryName": "string",
+        "transferAccountId": "string(uuid)",
+        "transferAccountName": "string",
+        "deleted": "boolean",
+        "subTransactions": {
+          "arrayOfObjects": {
+            "id": "string(uuid)",
+            "amount": "int",
+            "note": "string",
+            "payeeId": "string(uuid)",
+            "payeeName": "string",
+            "categoryId": "string(uuid)",
+            "categoryName": "string",
+            "transferAccountId": "string(uuid)",
+            "transferAccountName": "string",
+            "deleted": "boolean"
+          }
         }
       }
     }

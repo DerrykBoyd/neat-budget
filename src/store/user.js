@@ -1,12 +1,10 @@
-import { debug } from "svelte/internal";
-import { readable, writable } from "svelte/store";
-import { auth, ui, uiConfig, db } from "utils/firebase";
+import { writable } from "svelte/store";
+import { auth, db } from "utils/firebase";
 
 let updateUser;
 auth.onAuthStateChanged((newUser) => {
   if (newUser) {
     localStorage.setItem("loggedIn", "true");
-    loadingUser.set(true);
     updateUser = db
       .collection("users")
       .doc(newUser.uid)
@@ -18,7 +16,7 @@ auth.onAuthStateChanged((newUser) => {
             photoURL.set(user.photoURL || newUser.photoURL || "");
             userEmail.set(user.email);
             providerData.set(user.providerData || newUser.providerData);
-            loadingUser.set(false);
+            userLoaded.set(true);
             console.log("User fetched from db");
           } else {
             db.collection("users")
@@ -41,6 +39,7 @@ auth.onAuthStateChanged((newUser) => {
     displayName.set(null);
     photoURL.set(null);
     userEmail.set(null);
+    userLoaded.set(false);
     if (updateUser) {
       updateUser();
       console.log("Unsub from user");
@@ -48,8 +47,8 @@ auth.onAuthStateChanged((newUser) => {
   }
 });
 
+export const userLoaded = writable(false);
 export const displayName = writable(null);
 export const photoURL = writable(null);
 export const userEmail = writable(null);
-export const loadingUser = writable(false);
 export const providerData = writable([]);

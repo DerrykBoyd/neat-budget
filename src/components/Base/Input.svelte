@@ -6,13 +6,20 @@
   export let placeholder = "";
   export let value = "";
   export let disabled = false;
+  export let onEnter = null;
+
+  const handleKeyDown = (e) => {
+    if (onEnter && e.key === "Enter") onEnter(value);
+  };
 </script>
 
 <style>
   /* your styles go here */
 </style>
 
-{#if label}<label for={name} class="mt-2 block text-sm font-medium text-gray-700">{label}</label>{/if}
+{#if label}
+  <label for={name} class="mt-2 block text-sm font-medium text-gray-700">{label}</label>
+{/if}
 <input
   type="text"
   {name}
@@ -20,5 +27,6 @@
   id={name}
   {autocomplete}
   {placeholder}
+  on:keydown={handleKeyDown}
   bind:value
   class={`${disabled ? 'opacity-40' : ''} mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md`} />

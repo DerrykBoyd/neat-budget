@@ -1,21 +1,23 @@
 <script>
   import { afterUpdate, onMount } from "svelte";
+  import { navigate } from "svelte-routing";
   import { currentPath } from "store/currentPath";
-  import { userEmail, displayName, loadingUser } from "store/user";
-  import { budgets, createBudget } from "store/budgets";
+  import { userEmail, userLoaded } from "../store/user";
+  import { budgets } from "../store/budgets";
   import { ui, uiConfig } from "utils/firebase";
   import Loader from "../components/Base/Loader.svelte";
-  import Button from "../components/Base/Button.svelte";
+  import Link from "svelte-routing/src/Link.svelte";
 
-  let name = "DB Budgeting App";
   let loggedIn = localStorage.getItem("loggedIn") === "true";
   currentPath.set("/");
   onMount(() => {
     let queryString = new URLSearchParams(window.location.search);
     let hasLogin = queryString.has("login");
     loggedIn = localStorage.getItem("loggedIn") === "true";
-    if (hasLogin || $loadingUser || loggedIn)
-      document.getElementById("firebaseui-auth-container").style.display = "none";
+    if (hasLogin || $userLoaded || loggedIn) {
+      const firebaseUiContainer = document.getElementById("firebaseui-auth-container");
+      if (firebaseUiContainer) firebaseUiContainer.style.display = "none";
+    }
   });
   afterUpdate(() => {
     let queryString = new URLSearchParams(window.location.search);
@@ -26,30 +28,20 @@
       ui.start("#firebaseui-auth-container", uiConfig);
     } else ui.reset();
   });
-
-  let newBudget = createBudget();
-
-  function addBudget(newBudget) {
-    budgets.update((arr) => [...arr, newBudget]);
-  }
 </script>
 
 <style>
 </style>
 
 <div class="home-content text-center">
-  <h1 class="text-2xl text-green-800">{name}</h1>
+  <h1 class="text-2xl text-green-800">Home Page</h1>
   {#if loggedIn}
-    {#if !$displayName}
+    {#if !$userLoaded}
       <Loader color="grey" />
     {:else}
-      <div>Welcome {$displayName}</div>
-      {#if !$budgets.length}
-        <div>Looks like you don't have any budgets yet. Lets create one.</div>
-        <Button handleClick={() => addBudget(newBudget)}>Add Budget</Button>
-      {:else}
-        <div>{$budgets[0]}</div>
-      {/if}
+      {#if $budgets?.length === 0}{navigate('/my-budgets')}{/if}
+      <div>App to go here</div>
+      <Link to="my-budgets">My Budgets</Link>
     {/if}
   {:else}
     <!-- Not logged in - show home page -->
