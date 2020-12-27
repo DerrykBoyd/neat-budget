@@ -8,8 +8,9 @@
   import Button from "../components/Base/Button.svelte";
 
   export let id;
-  let budget = $budgets.find((budget) => budget.id === id);
-  currentPath.set("/budget");
+  let currentBudget = null;
+  $: currentBudget = $budgets.find((budget) => budget.id === id);
+  currentPath.set(`/budget/${id}`);
   // redirect to home if not logged in.
   let loggedIn = localStorage.getItem("loggedIn") === "true";
   onMount(() => {
@@ -24,12 +25,11 @@
 {#if loggedIn}
   {#if !$displayName}
     <Loader color="grey" />
-  {:else if !$budget}
+  {:else if !currentBudget}
     <div>Budget not found</div>
   {:else}
-    {#each $budgets as budget}
-      <div>{budget.id}</div>
-    {/each}
+    <div>{currentBudget.name}</div>
+    <div>{currentBudget.id}</div>
   {/if}
 {:else}
   <!-- Not logged in -->

@@ -9,6 +9,7 @@
   import { db } from "../utils/firebase";
   import Input from "../components/Base/Input.svelte";
   import InfoMessage from "../components/Base/InfoMessage.svelte";
+  import Link from "svelte-routing/src/Link.svelte";
 
   currentPath.set("/settings");
   // redirect to home if not logged in.
@@ -54,7 +55,9 @@
       <div>Looks like you don't have any budgets yet. Lets create one.</div>
     {:else}
       {#each $sortedBudgets as budget}
-        <div>{budget.name}</div>
+        <Link to={`budget/${budget.id}`}>
+          <div>{budget.name}</div>
+        </Link>
         <div>{budget.id}</div>
         <div>{budget.createdTime}</div>
       {/each}

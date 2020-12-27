@@ -13,13 +13,14 @@ auth.onAuthStateChanged((currentUser) => {
       .where("owner", "==", currentUser.uid)
       .onSnapshot(
         (snapshot) => {
-          snapshot.forEach((doc) => {
-            let budget = doc.data();
-            budgets.update((budgets) => {
-              let ind = budgets.findIndex((el) => el.id === budget.id);
-              if (ind === -1) budgets.push(budget);
-              else budgets[ind] = budget;
-              return budgets;
+          snapshot.docChanges().forEach((change) => {
+            let budget = change.doc.data();
+            budgets.update((newBudgets) => {
+              let ind = newBudgets.findIndex((el) => el.id === budget.id);
+              if (change.type === "removed") newBudgets.splice(ind, 1);
+              else if (ind === -1) newBudgets.push(budget);
+              else newBudgets[ind] = budget;
+              return newBudgets;
             });
           });
         },

@@ -11,6 +11,9 @@
   export let url = "";
 </script>
 
+<style>
+</style>
+
 <Router {url}>
   <Nav />
   <div class="main-content p-2 sm:p-4">
