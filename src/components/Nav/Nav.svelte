@@ -25,7 +25,6 @@
 </script>
 
 <style>
-  /* your styles go here */
 </style>
 
 <nav class="bg-green-500">
@@ -51,7 +50,8 @@
           </div>
         </div>
       </div>
-      <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+      <div
+        class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
         <!-- user menu and login -->
         {#if loggedIn}
           <div use:clickOutside on:click_outside={closeUserMenu} class="ml-3 relative">
@@ -67,7 +67,9 @@
                 {:else}<span class="material-icons md-36 text-gray-100">face</span>{/if}
               </button>
             </div>
-            <NavUserMenu {userMenuOpen} {toggleUserMenu} {logout} />
+            {#if userMenuOpen}
+              <NavUserMenu {toggleUserMenu} {logout} />
+            {/if}
           </div>
         {/if}
       </div>

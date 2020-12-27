@@ -11,11 +11,11 @@
   },
   "Budgets": {
     "Budget": {
+      "id": "string(uuid)",
+      "createdTime": "timeStamp",
       "owner": "string(uid)",
       "sharedWith": "array[string(uuid)]",
-      "id": "string(uuid)",
       "name": "string",
-      "lastModified": "timeStamp",
       "firstMonth": "timeStamp",
       "currencyCode": "enum[list of currency codes]",
       "Accounts": {
@@ -83,12 +83,12 @@
       "categories": {
         "arrayOfObjects": {
           "id": "string(uuid)",
-          "categoryGroupId": "string(uuid)",
+          "categoryId": "string(uuid)",
           "name": "string",
-          "hidden": "boolean",
           "note": "string",
           "budgeted": "int",
-          "balance": "int",
+          "spent": "int",
+          "hidden": "boolean",
           "deleted": "boolean"
         }
       },

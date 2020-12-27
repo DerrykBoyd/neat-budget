@@ -14,6 +14,9 @@
     a {
       @apply text-green-800 underline;
     }
+    nav a {
+      @apply no-underline;
+    }
   }
 </style>
 

@@ -8,6 +8,9 @@
 
 <style>
   /* your styles go here */
+  div {
+    text-decoration: none;
+  }
 </style>
 
 <Link {to} on:click={(_) => currentPath.set(to)}>
