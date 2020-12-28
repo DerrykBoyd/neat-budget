@@ -88,7 +88,7 @@ const createCategoryGroups = () => {
   };
 };
 
-export const createBudget = (name) => {
+export const createBudget = (name, currencyCode = "USD") => {
   let now = new Date();
   const { categoryGroups, categories } = createCategoryGroups();
   const newBudget = {
@@ -99,7 +99,7 @@ export const createBudget = (name) => {
     name: name,
     firstMonth: new Date(now.getFullYear(), now.getMonth()).toISOString(),
     lastOpened: Date.now(),
-    currencyCode: "USD",
+    currencyCode,
     accounts: [],
     categoryGroups: categoryGroups,
     categories: categories,

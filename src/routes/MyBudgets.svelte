@@ -11,6 +11,9 @@
   import InfoMessage from "../components/Base/InfoMessage.svelte";
   import Link from "svelte-routing/src/Link.svelte";
   import BudgetCard from "../components/MyBudgets/BudgetCard.svelte";
+  import Modal from "../components/Base/Modal.svelte";
+  import AddBudgetCard from "../components/MyBudgets/AddBudgetCard.svelte";
+  import Select from "../components/Base/Select.svelte";
 
   currentPath.set("/settings");
   // redirect to home if not logged in.
@@ -19,10 +22,21 @@
     if (!loggedIn) navigate("/");
   });
 
-  export let budgetName = "";
-  export let budgetNameError = "";
-  export let savingDefault = false;
-  export let defaultSaved = false;
+  let budgetName = "";
+  let budgetNameError = "";
+  let savingDefault = false;
+  let defaultSaved = false;
+  let newBudgetModal = false;
+  let currencyFormat = "USD";
+
+  const toggleModal = () => {
+    if (newBudgetModal) {
+      newBudgetModal = false;
+      budgetNameError = "";
+    } else {
+      newBudgetModal = true;
+    }
+  };
 
   function addBudget() {
     if (!budgetName) {
@@ -30,8 +44,9 @@
       return;
     }
     budgetNameError = "";
-    let newBudget = createBudget(budgetName);
+    let newBudget = createBudget(budgetName, currencyFormat);
     db.collection("budgets").add(newBudget);
+    toggleModal();
     budgetName = "";
   }
 
@@ -71,16 +86,6 @@
   {#if !$displayName}
     <Loader color="grey" />
   {:else}
-    <Input
-      bind:value={budgetName}
-      name="budget-name"
-      placeholder="name"
-      label="New Budget"
-      onEnter={addBudget} />
-    {#if budgetNameError}
-      <InfoMessage icon="error" color="red-800">{budgetNameError}</InfoMessage>
-    {/if}
-    <Button handleClick={() => addBudget('newBudget')}>Add Budget</Button>
     {#if !$sortedBudgets.length}
       <div>Looks like you don't have any budgets yet. Lets create one.</div>
     {:else}
@@ -94,8 +99,30 @@
         {#each $sortedBudgets as budget}
           <BudgetCard {budget} {setDefaultBudget} />
         {/each}
+        <AddBudgetCard {toggleModal} />
       </div>
     {/if}
+    <Modal showModal={newBudgetModal}>
+      <div>
+        <Input
+          bind:value={budgetName}
+          name="budget-name"
+          placeholder="Budget name"
+          label="Name"
+          onEnter={addBudget} />
+        {#if budgetNameError}
+          <InfoMessage icon="error" color="red-800">{budgetNameError}</InfoMessage>
+        {/if}
+        <Select
+          bind:value={currencyFormat}
+          options={['USD', 'CAD', 'GBP', 'EUR']}
+          label="Currency Format" />
+      </div>
+      <div slot="actions" class="relative flex justify-end items-center">
+        <Button handleClick={toggleModal} color="grey">Cancel</Button>
+        <Button handleClick={() => addBudget()}>Save</Button>
+      </div>
+    </Modal>
   {/if}
 {:else}
   <!-- Not logged in -->
