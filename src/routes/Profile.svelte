@@ -11,7 +11,7 @@
   import Modal from "../components/Base/Modal.svelte";
   import { displayName, photoURL, providerData, userEmail } from "../store/user";
   import { cropSrc, cropImg } from "../store/profile";
-  import { modalLoaded, showModal } from "../store/modal";
+  import { modalLoaded } from "../store/modal";
   import { auth, db, functions, storage } from "../utils/firebase";
   import Loader from "../components/Base/Loader.svelte";
   import InfoMessage from "../components/Base/InfoMessage.svelte";
@@ -32,10 +32,12 @@
   let newPasswordConfirm = "";
   let newPasswordError = "";
   let userHasPassword = null;
+  let showImageModal = false;
 
   // check if user signed in with password
   $: if ($providerData.length) {
-    if ($providerData.findIndex((el) => el.providerId === "password") !== -1) userHasPassword = true;
+    if ($providerData.findIndex((el) => el.providerId === "password") !== -1)
+      userHasPassword = true;
   }
 
   currentPath.set("/profile");
@@ -45,11 +47,12 @@
   });
 
   const toggleModal = () => {
-    if ($showModal) {
-      modalLoaded.set(false);
+    if (showImageModal) {
+      showImageModal = false;
       cropSrc.set("");
+      return;
     }
-    $showModal ? showModal.set(false) : showModal.set(true);
+    showImageModal = true;
   };
 
   async function saveNewPassword() {
@@ -137,7 +140,7 @@
       let file = profileInput?.files[0];
       if (file) {
         // validate type and size
-        if (file.type !== "image/jpeg" || file.type !== "image/png") {
+        if (file.type !== "image/jpeg" && file.type !== "image/png") {
           imageError = "File must be jpeg or png";
           return;
         }
@@ -145,7 +148,7 @@
           imageError = "File size must be less than 5MB";
           return;
         }
-        if (!$showModal) showModal.set(true);
+        if (!showImageModal) showImageModal = true;
         const reader = new FileReader();
         reader.onload = () => {
           // once the file data is set, the cropper will load
@@ -153,6 +156,7 @@
           imageError = "";
         };
         reader.readAsDataURL(file);
+        profileInput.value = "";
       }
     });
     // open the file picker
@@ -193,7 +197,7 @@
             .catch((e) => console.error(e))
             .finally(() => {
               uploadingProfile = false;
-              showModal.set(false);
+              showImageModal = false;
               cropSrc.set(null);
             });
         });
@@ -215,7 +219,7 @@
   }
 </style>
 
-<Modal>
+<Modal showModal={showImageModal}>
   <div>
     {#if $cropSrc}<img id="image" bind:this={$cropImg} src={$cropSrc} alt="cropper" />{/if}
   </div>
@@ -233,11 +237,15 @@
   <h1 class="text-2xl text-green-800">PROFILE</h1>
   <div class="profile-image flex flex-wrap justify-center m-4">
     <div class="flex flex-col items-center">
-      <div class="mx-12 my-4 w-24 h-24 bg-gray-100 rounded-full flex justify-center items-center shadow relative">
+      <div
+        class="mx-12 my-4 w-24 h-24 bg-gray-100 rounded-full flex justify-center items-center shadow relative">
         {#if $photoURL}
           <img class="object-cover rounded-full" src={$photoURL} alt="profile" />
         {:else}
-          <img class="w-16 h-16 rounded-full" src="images/placeholder-profile-img.svg" alt="placeholder-profile" />
+          <img
+            class="w-16 h-16 rounded-full"
+            src="images/placeholder-profile-img.svg"
+            alt="placeholder-profile" />
         {/if}
         {#if !uploadingProfile}
           <div
@@ -246,7 +254,8 @@
             <span class="cam-icon material-icons md-light">add_a_photo</span>
           </div>
         {:else}
-          <div class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
+          <div
+            class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
         {/if}
       </div>
       {#if imageError}
@@ -254,7 +263,11 @@
       {/if}
     </div>
     <div class="profile-settings w-full sm:w-96">
-      <Input autocomplete="name" name="displayName" label="Display Name" bind:value={$displayName} />
+      <Input
+        autocomplete="name"
+        name="displayName"
+        label="Display Name"
+        bind:value={$displayName} />
       <div class="flex items-center">
         <Button disabled={nameChangePending} handleClick={updateDisplayName}>Save</Button>
         {#if nameChangeSuccess}
@@ -275,7 +288,11 @@
         {#if currentPasswordError === 'Invalid Password'}
           <InfoMessage icon="error" color="red-600">{currentPasswordError}</InfoMessage>
         {/if}
-        <InputPwd autocomplete="new-password" name="newPassword" label="New Password" bind:value={newPassword} />
+        <InputPwd
+          autocomplete="new-password"
+          name="newPassword"
+          label="New Password"
+          bind:value={newPassword} />
         <InputPwd
           autocomplete="new-password"
           name="confirmNewPassword"

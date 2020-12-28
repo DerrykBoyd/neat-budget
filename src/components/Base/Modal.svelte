@@ -1,6 +1,8 @@
 <script>
-  import { fade } from "svelte/transition";
-  import { modalLoaded, showModal } from "../../store/modal";
+  import { scale } from "svelte/transition";
+  import { modalLoaded } from "../../store/modal";
+
+  export let showModal = false;
 </script>
 
 <style>
@@ -11,17 +13,17 @@
   }
 </style>
 
-{#if $showModal}
+{#if showModal}
   <!-- content here -->
   <div class="fixed z-10 inset-0 overflow-y-auto">
-    <div class="modal-container min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="modal-container min-h-screen pt-4 px-4 pb-20 text-center sm:p-0">
       <!-- Background overlay, show/hide based on modal state.-->
-      <div transition:fade={{ duration: 150 }} class={`fixed inset-0`} aria-hidden="true">
+      <div class={`fixed inset-0`} aria-hidden="true">
         <div class="absolute inset-0 bg-black opacity-50" />
       </div>
       <!-- Modal Content -->
       <div
-        transition:fade={{ duration: 150 }}
+        transition:scale
         on:introend={() => modalLoaded.set(true)}
         class="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
         role="dialog"
