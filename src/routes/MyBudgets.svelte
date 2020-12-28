@@ -2,14 +2,13 @@
   import { currentPath } from "store/currentPath";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
-  import { displayName, defaultBudget } from "../store/user";
+  import { userLoaded } from "../store/user";
   import { sortedBudgets, createBudget } from "../store/budgets";
   import Loader from "../components/Base/Loader.svelte";
   import Button from "../components/Base/Button.svelte";
   import { auth, db } from "../utils/firebase";
   import Input from "../components/Base/Input.svelte";
   import InfoMessage from "../components/Base/InfoMessage.svelte";
-  import Link from "svelte-routing/src/Link.svelte";
   import BudgetCard from "../components/MyBudgets/BudgetCard.svelte";
   import Modal from "../components/Base/Modal.svelte";
   import AddBudgetCard from "../components/MyBudgets/AddBudgetCard.svelte";
@@ -83,25 +82,21 @@
 </style>
 
 {#if loggedIn}
-  {#if !$displayName}
+  {#if !$userLoaded}
     <Loader color="grey" />
   {:else}
-    {#if !$sortedBudgets.length}
-      <div>Looks like you don't have any budgets yet. Lets create one.</div>
-    {:else}
-      <div class="flex items-center">
-        <h2 class="text-gray-600 font-medium uppercase tracking-wide pr-4 my-2">My Budgets</h2>
-        {#if defaultSaved}
-          <InfoMessage icon="cloud_done">Saved</InfoMessage>
-        {/if}
-      </div>
-      <div class="budget-grid">
-        {#each $sortedBudgets as budget}
-          <BudgetCard {budget} {setDefaultBudget} />
-        {/each}
-        <AddBudgetCard {toggleModal} />
-      </div>
-    {/if}
+    <div class="flex items-center">
+      <h2 class="text-gray-600 font-medium uppercase tracking-wide pr-4 my-2">My Budgets</h2>
+      {#if defaultSaved}
+        <InfoMessage icon="cloud_done">Saved</InfoMessage>
+      {/if}
+    </div>
+    <div class="budget-grid">
+      {#each $sortedBudgets as budget}
+        <BudgetCard {budget} {setDefaultBudget} />
+      {/each}
+      <AddBudgetCard {toggleModal} />
+    </div>
     <Modal showModal={newBudgetModal}>
       <div>
         <Input

@@ -28,7 +28,7 @@ auth.onAuthStateChanged((currentUser) => {
       );
   } else {
     // user logged out remove listener
-    updateBudgets();
+    if (updateBudgets) updateBudgets();
   }
 });
 

@@ -46,6 +46,7 @@ auth.onAuthStateChanged((newUser) => {
       updateUser();
       console.log("Unsub from user");
     }
+    if (window.location.pathname !== "/") window.location.pathname = "/";
   }
 });
 

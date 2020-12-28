@@ -34,17 +34,12 @@
 </style>
 
 <div class="home-content text-center">
-  <h1 class="text-2xl text-green-800">Home Page</h1>
   {#if loggedIn}
     {#if !$userLoaded}
       <Loader color="grey" />
-    {:else}
-      {#if $budgets?.length === 0}{navigate('/my-budgets')}{/if}
-      <div>App to go here</div>
-      <Link to="my-budgets">My Budgets</Link>
-    {/if}
+    {:else}{navigate('/my-budgets')}{/if}
   {:else}
-    <!-- Not logged in - show home page -->
+    <h1 class="text-2xl text-green-800">Home Page</h1>
     <div>Home page to go here</div>
   {/if}
   <div id="firebaseui-auth-container" />
