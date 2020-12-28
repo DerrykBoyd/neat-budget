@@ -16,6 +16,11 @@ label {
 	display: block;
 }
 
+a {
+  @apply text-green-800;
+  text-decoration: none;
+}
+
 /* Material Icon Styles */
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }

@@ -12,6 +12,7 @@ auth.onAuthStateChanged((newUser) => {
         (doc) => {
           if (doc.exists) {
             let user = doc.data();
+            defaultBudget.set(user.defaultBudget);
             displayName.set(user.displayName);
             photoURL.set(user.photoURL || newUser.photoURL || "");
             userEmail.set(user.email);
@@ -23,8 +24,9 @@ auth.onAuthStateChanged((newUser) => {
               .doc(newUser.uid)
               .set({
                 creationTime: newUser?.metadata?.creationTime || Date.now(),
-                email: newUser.email,
+                defaultBudget: "",
                 displayName: newUser.displayName,
+                email: newUser.email,
                 photoURL: newUser.photoURL,
                 uid: newUser.uid,
                 providerData: newUser.providerData,
@@ -48,6 +50,7 @@ auth.onAuthStateChanged((newUser) => {
 });
 
 export const userLoaded = writable(false);
+export const defaultBudget = writable(null);
 export const displayName = writable(null);
 export const photoURL = writable(null);
 export const userEmail = writable(null);

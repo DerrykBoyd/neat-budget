@@ -98,6 +98,7 @@ export const createBudget = (name) => {
     sharedWith: [],
     name: name,
     firstMonth: new Date(now.getFullYear(), now.getMonth()).toISOString(),
+    lastOpened: Date.now(),
     currencyCode: "USD",
     accounts: [],
     categoryGroups: categoryGroups,

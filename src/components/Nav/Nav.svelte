@@ -1,7 +1,8 @@
 <script>
   import Link from "svelte-routing/src/Link.svelte";
+  import { fade } from "svelte/transition";
   import { clickOutside } from "utils/clickOutside";
-  import { displayName, photoURL, userEmail } from "store/user";
+  import { photoURL } from "store/user";
   import { currentPath } from "store/currentPath";
   import MobileMenuBtn from "./MobileMenuBtn";
   import NavBtn from "./NavBtn";
@@ -76,8 +77,10 @@
     </div>
   </div>
   <!-- mobile menu dropdown -->
-  <div class={`${mobileMenuOpen ? 'block' : 'hidden'} sm:hidden`} on:click={toggleMobileMenu}>
-    <NavBtn to="/" text="Home" />
-    <NavBtn to="/about" text="About" />
-  </div>
+  {#if mobileMenuOpen}
+    <div transition:fade class={`sm:hidden block`} on:click={toggleMobileMenu}>
+      <NavBtn to="/" text="Home" />
+      <NavBtn to="/about" text="About" />
+    </div>
+  {/if}
 </nav>

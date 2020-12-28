@@ -4,6 +4,7 @@
   export let handleClick = null;
   export let disabled = false;
   export let color = "green";
+  export let noMargin = false;
 
   let bgColor = "green-600";
   let hoverColor = "green-700";
@@ -18,12 +19,12 @@
     case "gray":
       bgColor = "gray-200";
       hoverColor = "gray-300";
-      textColor = "black-800";
+      textColor = "gray-800";
       break;
     case "white":
       bgColor = "white";
       hoverColor = "gray-50";
-      textColor = "black-800";
+      textColor = "gray-800";
       break;
   }
 </script>
@@ -37,7 +38,7 @@
   {id}
   {disabled}
   on:click={handleClick}
-  class={`${disabled ? 'opacity-30 pointer-events-none' : 'opacity-100'} hover:bg-${hoverColor} text-${textColor}  my-2 mr-2 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium bg-${bgColor}`}>
+  class={`${disabled ? 'opacity-30 pointer-events-none' : 'opacity-100'} hover:bg-${hoverColor} text-${textColor} ${noMargin ? '' : 'my-2 mr-2'} inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium bg-${bgColor}`}>
   <slot name="icon" />
   <slot />
 </button>

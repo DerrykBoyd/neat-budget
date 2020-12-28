@@ -9,15 +9,6 @@
   @tailwind components;
   /* purgecss end ignore */
   @tailwind utilities;
-
-  @layer base {
-    a {
-      @apply text-green-800 underline;
-    }
-    nav a {
-      @apply no-underline;
-    }
-  }
 </style>
 
 <Routes />
