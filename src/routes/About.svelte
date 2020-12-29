@@ -1,6 +1,7 @@
 <script>
   import { currentPath } from "store/currentPath";
-
+  import Fa from "svelte-fa";
+  import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
   currentPath.set("/about");
 </script>
 
@@ -18,14 +19,31 @@
   </p>
   <div>
     Icon credit:
-    <a href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a>
+    <a
+      href="https://www.flaticon.com/authors/smashicons"
+      title="Smashicons"
+      target="_blank"
+      rel="noopener noreferrer">Smashicons
+      <Fa class="fa-icon ext-link" icon={faExternalLinkAlt} size="xs" /></a>
     from
-    <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+    <a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="noopener noreferrer">
+      www.flaticon.com
+      <Fa class="fa-icon ext-link" icon={faExternalLinkAlt} size="xs" /></a>
   </div>
   <div>
     Icon credit:
-    <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
+    <a
+      href="https://www.flaticon.com/authors/freepik"
+      title="Freepik"
+      target="_blank"
+      rel="noopener noreferrer">Freepik
+      <Fa class="fa-icon ext-link" icon={faExternalLinkAlt} size="xs" /></a>
     from
-    <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    <a
+      href="https://www.flaticon.com/"
+      title="Flaticon"
+      target="_blank"
+      rel="noopener noreferrer">www.flaticon.com
+      <Fa class="fa-icon ext-link" icon={faExternalLinkAlt} size="xs" /></a>
   </div>
 </div>

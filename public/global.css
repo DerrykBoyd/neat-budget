@@ -21,6 +21,15 @@ a {
   text-decoration: none;
 }
 
+.fa-icon {
+  display: inline;
+}
+
+.fa-icon.ext-link {
+  padding-bottom: 2px;
+  transform: translateY(-0.4rem);
+}
+
 /* Material Icon Styles */
 /* Rules for sizing the icon. */
 .material-icons.md-18 { font-size: 18px; }
