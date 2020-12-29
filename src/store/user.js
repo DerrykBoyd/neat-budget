@@ -50,9 +50,18 @@ auth.onAuthStateChanged((newUser) => {
   }
 });
 
+window.addEventListener("offline", function (e) {
+  isOnline.set(false);
+});
+
+window.addEventListener("online", function (e) {
+  isOnline.set(true);
+});
+
 export const userLoaded = writable(false);
 export const defaultBudget = writable(null);
 export const displayName = writable(null);
 export const photoURL = writable(null);
 export const userEmail = writable(null);
 export const providerData = writable([]);
+export const isOnline = writable(navigator.onLine);

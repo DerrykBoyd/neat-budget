@@ -9,7 +9,7 @@
   import Input from "../components/Base/Input.svelte";
   import InputPwd from "../components/Base/InputPwd.svelte";
   import Modal from "../components/Base/Modal.svelte";
-  import { displayName, photoURL, providerData, userEmail } from "../store/user";
+  import { displayName, photoURL, providerData, userEmail, isOnline } from "../store/user";
   import { cropSrc, cropImg } from "../store/profile";
   import { modalLoaded } from "../store/modal";
   import { auth, db, functions, storage } from "../utils/firebase";
@@ -247,15 +247,17 @@
             src="images/placeholder-profile-img.svg"
             alt="placeholder-profile" />
         {/if}
-        {#if !uploadingProfile}
-          <div
-            class="add-photo-btn cursor-pointer rounded-full w-9 h-9 bg-green-600 absolute right-0 bottom-0 shadow flex justify-center items-center"
-            on:click={uploadProfileImg}>
-            <span class="cam-icon material-icons md-light">add_a_photo</span>
-          </div>
-        {:else}
-          <div
-            class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
+        {#if $isOnline}
+          {#if !uploadingProfile && $isOnline}
+            <div
+              class="add-photo-btn cursor-pointer rounded-full w-9 h-9 bg-green-600 absolute right-0 bottom-0 shadow flex justify-center items-center"
+              on:click={uploadProfileImg}>
+              <span class="cam-icon material-icons md-light">add_a_photo</span>
+            </div>
+          {:else}
+            <div
+              class="add-photo-btn rounded-full w-9 h-9 bg-green-600 opacity-80 absolute right-0 bottom-0 shadow" />
+          {/if}
         {/if}
       </div>
       {#if imageError}
@@ -277,7 +279,7 @@
           <InfoMessage icon="error" color="red-600">Error updating dispaly name</InfoMessage>
         {/if}
       </div>
-      {#if userHasPassword}
+      {#if userHasPassword && $isOnline}
         <p class="py-2 mt-4">Change Password</p>
 
         <InputPwd

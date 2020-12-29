@@ -7,6 +7,8 @@ import css from "rollup-plugin-css-only";
 import includePaths from "rollup-plugin-includepaths";
 import sveltePreprocess from "svelte-preprocess";
 import replace from "rollup-plugin-replace";
+import { generateSW } from "rollup-plugin-workbox";
+import del from "rollup-plugin-delete";
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -53,7 +55,41 @@ export default {
         ? JSON.stringify("production")
         : JSON.stringify("development"),
     }),
+    del({ targets: ["public/workbox-*"] }),
     includePaths(includePathOptions),
+    generateSW({
+      swDest: "public/service-worker.js",
+      globDirectory: "public/",
+      globPatterns: ["**/*.{html,js,css}"],
+      cacheId: "budget-app",
+      navigateFallback: "/index.html",
+      cleanupOutdatedCaches: true,
+      skipWaiting: true,
+      // Define runtime caching rules.
+      runtimeCaching: [
+        {
+          // Match any request that contains .png, .jpg, .jpeg or .svg.
+          urlPattern: ({ request }) => request.destination === "image",
+          // Apply a cache-first strategy.
+          handler: "CacheFirst",
+          options: {
+            // Use a custom cache name.
+            cacheName: "images",
+            // Only cache 10 images.
+            // expiration: {
+            //   maxEntries: 10,
+            // },
+          },
+        },
+        {
+          urlPattern: /\.(?:css)$/,
+          handler: "StaleWhileRevalidate",
+          options: {
+            cacheName: "css",
+          },
+        },
+      ],
+    }),
     svelte({
       compilerOptions: {
         // enable run-time checks when not in production
