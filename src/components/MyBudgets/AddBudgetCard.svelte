@@ -1,8 +1,4 @@
 <script>
-  import Button from "../Base/Button.svelte";
-  import { defaultBudget } from "../../store/user";
-  import Badge from "../Base/Badge.svelte";
-
   export let toggleModal;
 </script>
 

@@ -106,7 +106,7 @@
           label="Name"
           onEnter={addBudget} />
         {#if budgetNameError}
-          <InfoMessage icon="error" color="red-800">{budgetNameError}</InfoMessage>
+          <InfoMessage icon="error" color="text-red-800">{budgetNameError}</InfoMessage>
         {/if}
         <Select
           bind:value={currencyFormat}

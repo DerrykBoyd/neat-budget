@@ -261,7 +261,7 @@
         {/if}
       </div>
       {#if imageError}
-        <InfoMessage icon="error" color="red-600">{imageError}</InfoMessage>
+        <InfoMessage icon="error" color="text-red-600">{imageError}</InfoMessage>
       {/if}
     </div>
     <div class="profile-settings w-full sm:w-96">
@@ -276,7 +276,7 @@
           <InfoMessage icon="cloud_done">Saved</InfoMessage>
         {/if}
         {#if nameChangeError}
-          <InfoMessage icon="error" color="red-600">Error updating dispaly name</InfoMessage>
+          <InfoMessage icon="error" color="text-red-600">Error updating dispaly name</InfoMessage>
         {/if}
       </div>
       {#if userHasPassword && $isOnline}
@@ -288,7 +288,7 @@
           label="Current Password"
           bind:value={currentPassword} />
         {#if currentPasswordError === 'Invalid Password'}
-          <InfoMessage icon="error" color="red-600">{currentPasswordError}</InfoMessage>
+          <InfoMessage icon="error" color="text-red-600">{currentPasswordError}</InfoMessage>
         {/if}
         <InputPwd
           autocomplete="new-password"
@@ -301,7 +301,7 @@
           label="Confirm New Password"
           bind:value={newPasswordConfirm} />
         {#if newPasswordError}
-          <InfoMessage icon="error" color="red-800">{newPasswordError}</InfoMessage>
+          <InfoMessage icon="error" color="text-red-600">{newPasswordError}</InfoMessage>
         {/if}
         <div class="flex items-center">
           <Button
@@ -313,7 +313,7 @@
             <InfoMessage icon="cloud_done">Password Changed</InfoMessage>
           {/if}
           {#if newPasswordSaveError}
-            <InfoMessage icon="error" color="red-600">Error Saving Password</InfoMessage>
+            <InfoMessage icon="error" color="text-red-600">Error Saving Password</InfoMessage>
           {/if}
         </div>
       {/if}

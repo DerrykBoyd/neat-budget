@@ -9,6 +9,7 @@
   import Loader from "components/Base/Loader";
   import NavUserMenu from "./NavUserMenu";
   import { auth } from "utils/firebase";
+  import { appName } from "../../store/ui";
 
   let mobileMenuOpen = false;
   let userMenuOpen = false;

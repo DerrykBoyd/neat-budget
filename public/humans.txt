@@ -1,0 +1,9 @@
+/* TEAM */
+  Author: Derryk Boyd
+  GitHub: @dboydgit
+  Twitter: @derrykboyd
+  From: Edmonton, Alberta, Canada
+
+/* SITE */
+  Language: English
+  Tech: Svelte, Javascript, HTML, CSS

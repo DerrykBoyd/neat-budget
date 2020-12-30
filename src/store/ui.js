@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { readable, writable } from "svelte/store";
 
 export const setAlert = ({ message, color, icon, canDismiss = true }) => {
   alertMessage.set(message);
@@ -19,6 +19,8 @@ export const dismissBanner = () => {
   bannerMessage.set("");
   bannerLeftIcon.set(null);
 };
+
+export const appName = readable("Neat Budget");
 
 export const showAlert = writable(null);
 export const alertMessage = writable("");
