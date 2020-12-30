@@ -1,5 +1,7 @@
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
 import { auth, db } from "utils/firebase";
+import { alertMessage, dismissAlert, setAlert } from "./ui";
+import { faExclamationCircle, faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 let updateUser;
 auth.onAuthStateChanged((newUser) => {
@@ -50,12 +52,34 @@ auth.onAuthStateChanged((newUser) => {
   }
 });
 
+if (!navigator.onLine)
+  setAlert({
+    message: "You are offline. You can still use the app but some functions will be disabled.",
+    color: "yellow",
+    icon: faExclamationCircle,
+  });
+
 window.addEventListener("offline", function (e) {
   isOnline.set(false);
+  setAlert({
+    message: "You are offline. You can still use the app but some functions will be disabled.",
+    color: "yellow",
+    icon: faExclamationCircle,
+  });
 });
 
 window.addEventListener("online", function (e) {
   isOnline.set(true);
+  if (
+    get(alertMessage) ===
+    "You are offline. You can still use the app but some functions will be disabled."
+  )
+    dismissAlert();
+  setAlert({
+    message: "You are back online",
+    color: "green",
+    icon: faCheckCircle,
+  });
 });
 
 export const userLoaded = writable(false);

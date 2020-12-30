@@ -60,7 +60,7 @@ export default {
     generateSW({
       swDest: "public/service-worker.js",
       globDirectory: "public/",
-      globPatterns: ["**/*.{html,js,css}"],
+      additionalManifestEntries: ["/build/bundle.js", "/build/bundle.css"],
       cacheId: "budget-app",
       navigateFallback: "/index.html",
       cleanupOutdatedCaches: true,
@@ -68,24 +68,25 @@ export default {
       // Define runtime caching rules.
       runtimeCaching: [
         {
-          // Match any request that contains .png, .jpg, .jpeg or .svg.
           urlPattern: ({ request }) => request.destination === "image",
           // Apply a cache-first strategy.
           handler: "CacheFirst",
           options: {
-            // Use a custom cache name.
             cacheName: "images",
-            // Only cache 10 images.
-            // expiration: {
-            //   maxEntries: 10,
-            // },
           },
         },
         {
-          urlPattern: /\.(?:css)$/,
+          urlPattern: ({ request }) => request.destination === "style",
           handler: "StaleWhileRevalidate",
           options: {
             cacheName: "css",
+          },
+        },
+        {
+          urlPattern: ({ request }) => request.destination === "script",
+          handler: "StaleWhileRevalidate",
+          options: {
+            cacheName: "javascript",
           },
         },
       ],
