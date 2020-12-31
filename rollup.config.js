@@ -11,6 +11,7 @@ import { generateSW } from "rollup-plugin-workbox";
 import del from "rollup-plugin-delete";
 
 const production = !process.env.ROLLUP_WATCH;
+const swVersion = "0.0.1-2";
 
 let includePathOptions = {
   include: {},
@@ -60,8 +61,9 @@ export default {
     generateSW({
       swDest: "public/service-worker.js",
       globDirectory: "public/",
-      additionalManifestEntries: ["/build/bundle.js", "/build/bundle.css"],
-      cacheId: "budget-app",
+      additionalManifestEntries: ["/build/bundle.css"], // disable javascript pre-cache in dev for live reload
+      // additionalManifestEntries: ["/build/bundle.js", "/build/bundle.css"],
+      cacheId: `neatBudget-${swVersion}`,
       navigateFallback: "/index.html",
       cleanupOutdatedCaches: true,
       skipWaiting: true,

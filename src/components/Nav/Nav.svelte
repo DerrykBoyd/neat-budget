@@ -6,7 +6,6 @@
   import { currentPath } from "store/currentPath";
   import MobileMenuBtn from "./MobileMenuBtn";
   import NavBtn from "./NavBtn";
-  import Loader from "components/Base/Loader";
   import NavUserMenu from "./NavUserMenu";
   import { auth } from "utils/firebase";
   import { appName } from "../../store/ui";
@@ -37,12 +36,9 @@
       </div>
       <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
         <Link to="/" on:click={() => setCurrentPath('/')}>
-          <div class="flex-shrink-0 flex items-center text-white">
-            <img
-              class="block md:hidden h-8 w-auto fill-current "
-              src="/images/placeholder-logo-mobile.svg"
-              alt="logo" />
-            <img class="hidden md:block h-8 w-auto" src="/images/placeholder-logo.svg" alt="logo" />
+          <div class="flex-shrink-0 flex items-center">
+            <img class="block w-auto h-8" src="/icons/logo-gray.svg" alt="logo" />
+            <span class="block text-2xl text-gray-200 w-auto ml-4">{$appName}</span>
           </div>
         </Link>
         <div class="hidden sm:block sm:ml-6">
