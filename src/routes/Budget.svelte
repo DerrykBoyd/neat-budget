@@ -25,7 +25,7 @@
   .budget {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: calc(100vh - 64px);
+    grid-template-rows: calc(100vh - 48px);
     align-items: stretch;
   }
   @media (min-width: 1024px) {

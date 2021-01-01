@@ -1,5 +1,6 @@
 <script>
   import CategoryList from "./CategoryList.svelte";
+  import CategoryTotals from "./CategoryTotals.svelte";
 
   export let currentBudget;
   export let currentMonth;
@@ -76,11 +77,12 @@
     </div>
   </div>
   <div class="categories flex overflow-y-scroll divide-x">
-    <div class="current-month flex flex-col">
+    <div class="current-month flex">
       <CategoryList {currentBudget} />
+      <CategoryTotals {currentBudget} />
     </div>
     <div class="next-month flex flex-col">
-      <CategoryList {currentBudget} />
+      <CategoryTotals {currentBudget} />
     </div>
   </div>
 </div>

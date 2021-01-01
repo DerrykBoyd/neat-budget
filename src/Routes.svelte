@@ -17,7 +17,7 @@
   .app {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 64px 1fr;
+    grid-template-rows: 48px 1fr;
     min-height: 100vh;
   }
 </style>

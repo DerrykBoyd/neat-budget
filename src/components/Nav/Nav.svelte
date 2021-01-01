@@ -27,7 +27,7 @@
 
 <nav class="bg-green-500">
   <div class="px-2 sm:px-6 lg:px-8">
-    <div class="relative flex items-center justify-between h-16">
+    <div class="relative flex items-center justify-between h-12">
       <div class="flex-1 flex items-center justify-start">
         <Link to="/" on:click={() => setCurrentPath('/')}>
           <div class="flex-shrink-0 flex items-center">
