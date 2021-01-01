@@ -85,17 +85,19 @@
   {#if !$userLoaded}
     <Loader color="grey" />
   {:else}
-    <div class="flex items-center">
-      <h2 class="text-gray-600 font-medium uppercase tracking-wide pr-4 my-2">My Budgets</h2>
-      {#if defaultSaved}
-        <InfoMessage icon="cloud_done">Saved</InfoMessage>
-      {/if}
-    </div>
-    <div class="budget-grid">
-      {#each $sortedBudgets as budget}
-        <BudgetCard {budget} {setDefaultBudget} />
-      {/each}
-      <AddBudgetCard {toggleModal} />
+    <div class="px-2">
+      <div class="flex items-center">
+        <h2 class="text-gray-600 font-medium uppercase tracking-wide pr-4 my-2">My Budgets</h2>
+        {#if defaultSaved}
+          <InfoMessage icon="cloud_done">Saved</InfoMessage>
+        {/if}
+      </div>
+      <div class="budget-grid">
+        {#each $sortedBudgets as budget}
+          <BudgetCard {budget} {setDefaultBudget} />
+        {/each}
+        <AddBudgetCard {toggleModal} />
+      </div>
     </div>
     <Modal showModal={newBudgetModal}>
       <div>

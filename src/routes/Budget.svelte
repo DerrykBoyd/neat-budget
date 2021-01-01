@@ -6,9 +6,12 @@
   import { budgets } from "../store/budgets";
   import Loader from "../components/Base/Loader.svelte";
   import Button from "../components/Base/Button.svelte";
+  import Sidebar from "../components/Budget/Sidebar.svelte";
+  import Months from "../components/Budget/Months.svelte";
 
   export let id;
   let currentBudget = null;
+  let currentMonth = new Date();
   $: currentBudget = $budgets.find((budget) => budget.id === id);
   currentPath.set(`/budget/${id}`);
   // redirect to home if not logged in.
@@ -19,7 +22,19 @@
 </script>
 
 <style>
-  /* your styles go here */
+  .budget {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: calc(100vh - 64px);
+    align-items: stretch;
+  }
+  @media (min-width: 1024px) {
+    .budget {
+      grid-template-columns: 300px 1fr;
+    }
+  }
+  @media (min-width: 1280px) {
+  }
 </style>
 
 {#if loggedIn}
@@ -28,8 +43,10 @@
   {:else if !currentBudget}
     <div>Budget not found</div>
   {:else}
-    <div>{currentBudget.name}</div>
-    <div>{currentBudget.id}</div>
+    <div class="budget">
+      <Sidebar {currentBudget} />
+      <Months {currentBudget} {currentMonth} />
+    </div>
   {/if}
 {:else}
   <!-- Not logged in -->

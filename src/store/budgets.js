@@ -32,10 +32,10 @@ auth.onAuthStateChanged((currentUser) => {
   }
 });
 
-export const createCategory = (categoryId, name) => {
+export const createCategory = (groupId, name) => {
   return {
     id: nanoid(),
-    categoryId,
+    groupId,
     name,
     note: "",
     budgeted: 0,
@@ -59,7 +59,7 @@ const createCategoryGroups = () => {
     createCategory(categoryGroups[0].id, "Cable/Streaming"),
     createCategory(categoryGroups[0].id, "Haircuts"),
     createCategory(categoryGroups[0].id, "Clothing"),
-    createCategory(categoryGroups[0].id, "Gifts"),
+    createCategory(categoryGroups[0].id, "Gifts/Giving"),
     createCategory(categoryGroups[1].id, "Rent/Mortgage"),
     createCategory(categoryGroups[1].id, "Property Tax"),
     createCategory(categoryGroups[1].id, "Home Insurance"),

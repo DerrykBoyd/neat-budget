@@ -14,20 +14,28 @@
 </script>
 
 <style>
+  .app {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 64px 1fr;
+    min-height: 100vh;
+  }
 </style>
 
 <Router {url}>
-  <Nav />
-  <div class="main-content p-2 sm:p-4">
-    <Route path="/">
-      <Home />
-    </Route>
-    <Route path="about" component={About} />
-    <Route path="settings" component={Settings} />
-    <Route path="profile" component={Profile} />
-    <Route path="my-budgets" component={MyBudgets} />
-    <Route path="budget/:id" component={Budget} />
+  <div class="app">
+    <Nav />
+    <div class="main-content">
+      <Route path="/">
+        <Home />
+      </Route>
+      <Route path="about" component={About} />
+      <Route path="settings" component={Settings} />
+      <Route path="profile" component={Profile} />
+      <Route path="my-budgets" component={MyBudgets} />
+      <Route path="budget/:id" component={Budget} />
+    </div>
+    <Alert />
+    <Banner />
   </div>
-  <Alert />
-  <Banner />
 </Router>

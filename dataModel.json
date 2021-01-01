@@ -22,7 +22,7 @@
         "arrayOfObjects": {
           "id": "string(uuid)",
           "name": "string",
-          "type": "enum[checking, savings, creditCard, lineOfCredit, otherAsset, otherLiability, investmentAccount, mortgage]",
+          "type": "enum[checking, savings, cash, creditCard, lineOfCredit, otherAsset, otherLiability, investmentAccount, mortgage]",
           "onBudget": "boolean",
           "closed": "boolean",
           "balance": "int",
@@ -83,24 +83,29 @@
       "categories": {
         "arrayOfObjects": {
           "id": "string(uuid)",
-          "categoryId": "string(uuid)",
+          "groupId": "string(uuid)",
           "name": "string",
           "note": "string",
-          "budgeted": "int",
-          "spent": "int",
+          "overspending": "int",
           "hidden": "boolean",
           "deleted": "boolean"
         }
       },
       "Months": {
-        "Month": {
+        "Month(timestamp for year and month)": {
           "month": "timeStamp",
           "note": "string",
           "income": "int",
           "budgeted": "int",
-          "activity": "int",
+          "spent": "int",
           "deleted": "boolean",
-          "transactions": "arrayOfObjects(Transaction)"
+          "categories": {
+            "categoryId": {
+              "budgeted": "int",
+              "spent": "int",
+              "note": "string"
+            }
+          }
         }
       },
       "Transaction": {

@@ -4,17 +4,14 @@
   import { clickOutside } from "utils/clickOutside";
   import { photoURL } from "store/user";
   import { currentPath } from "store/currentPath";
-  import MobileMenuBtn from "./MobileMenuBtn";
   import NavBtn from "./NavBtn";
   import NavUserMenu from "./NavUserMenu";
   import { auth } from "utils/firebase";
   import { appName } from "../../store/ui";
 
-  let mobileMenuOpen = false;
   let userMenuOpen = false;
   let loggedIn = localStorage.getItem("loggedIn") === "true";
 
-  const toggleMobileMenu = () => (mobileMenuOpen = !mobileMenuOpen);
   const toggleUserMenu = () => (userMenuOpen = !userMenuOpen);
   const closeUserMenu = () => (userMenuOpen = false);
   const setCurrentPath = (path) => currentPath.set(path);
@@ -31,10 +28,7 @@
 <nav class="bg-green-500">
   <div class="px-2 sm:px-6 lg:px-8">
     <div class="relative flex items-center justify-between h-16">
-      <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-        <MobileMenuBtn {toggleMobileMenu} {mobileMenuOpen} />
-      </div>
-      <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+      <div class="flex-1 flex items-center justify-start">
         <Link to="/" on:click={() => setCurrentPath('/')}>
           <div class="flex-shrink-0 flex items-center">
             <img class="block w-auto h-8" src="/icons/logo-gray.svg" alt="logo" />
@@ -73,11 +67,4 @@
       </div>
     </div>
   </div>
-  <!-- mobile menu dropdown -->
-  {#if mobileMenuOpen}
-    <div transition:fade class={`sm:hidden block`} on:click={toggleMobileMenu}>
-      <NavBtn to="/" text="Home" />
-      <NavBtn to="/about" text="About" />
-    </div>
-  {/if}
 </nav>
