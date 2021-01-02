@@ -4,3 +4,5 @@
 /public/workbox*
 
 .DS_Store
+
+.env
