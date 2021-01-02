@@ -9,6 +9,7 @@ import sveltePreprocess from "svelte-preprocess";
 import replace from "rollup-plugin-replace";
 import { generateSW } from "rollup-plugin-workbox";
 import del from "rollup-plugin-delete";
+import { config } from "dotenv";
 
 const production = !process.env.ROLLUP_WATCH;
 const swVersion = "0.0.1-3";
@@ -34,7 +35,6 @@ function serve() {
         stdio: ["ignore", "inherit", "inherit"],
         shell: true,
       });
-
       process.on("SIGTERM", toExit);
       process.on("exit", toExit);
     },
@@ -51,6 +51,11 @@ export default {
   },
   plugins: [
     replace({
+      _process: JSON.stringify({
+        env: {
+          ...config().parsed,
+        },
+      }),
       _ENVIRONMENT: production ? "prod" : "dev",
       "process.env.NODE_ENV": production
         ? JSON.stringify("production")
