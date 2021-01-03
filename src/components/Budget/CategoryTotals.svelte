@@ -21,7 +21,7 @@
         flex: 1 0 260px;
         @apply py-2 sm:py-1;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
       }
     }
   }
