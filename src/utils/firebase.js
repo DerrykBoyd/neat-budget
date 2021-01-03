@@ -5,14 +5,24 @@ import "firebase/functions";
 import "firebase/storage";
 import * as firebaseui from "firebaseui";
 
+const production = _process.env.ENVIRONMENT === "production";
+
 const config = {
-  apiKey: "AIzaSyAdeW-O6OMacKaEhDwe08TFMpaJaD6G7po",
-  authDomain: "budget-app-89e6d.firebaseapp.com",
-  projectId: "budget-app-89e6d",
-  storageBucket: "budget-app-89e6d.appspot.com",
-  messagingSenderId: "1037165621114",
-  appId: "1:1037165621114:web:b8fa8dddf4242320b0b0c3",
-  measurementId: "G-C2C1GM3TEY",
+  apiKey: production ? _process.env.FIREBASE_API_KEY : _process.env.FIREBASE_API_KEY_DEV,
+  authDomain: production
+    ? _process.env.FIREBASE_AUTH_DOMAIN
+    : _process.env.FIREBASE_AUTH_DOMAIN_DEV,
+  projectId: production ? _process.env.FIREBASE_PROJECT_ID : _process.env.FIREBASE_PROJECT_ID_DEV,
+  storageBucket: production
+    ? _process.env.FIREBASE_STORAGE_BUCKET
+    : _process.env.FIREBASE_STORAGE_BUCKET_DEV,
+  messagingSenderId: production
+    ? _process.env.FIREBASE_MESSAGING_ID
+    : _process.env.FIREBASE_MESSAGING_ID_DEV,
+  appId: production ? _process.env.FIREBASE_APP_ID : _process.env.FIREBASE_APP_ID_DEV,
+  measurementId: production
+    ? _process.env.FIREBASE_MEASUREMENT_ID
+    : _process.env.FIREBASE_MEASUREMENT_ID_DEV,
 };
 
 firebase.initializeApp(config);

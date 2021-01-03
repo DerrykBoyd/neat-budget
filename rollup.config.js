@@ -56,7 +56,6 @@ export default {
           ...config().parsed,
         },
       }),
-      _ENVIRONMENT: production ? "prod" : "dev",
       "process.env.NODE_ENV": production
         ? JSON.stringify("production")
         : JSON.stringify("development"),
@@ -67,7 +66,7 @@ export default {
       swDest: "public/service-worker.js",
       globDirectory: "public/",
       // disable javascript and css pre-cache in dev for live reload
-      // additionalManifestEntries: ["/build/bundle.js", "/build/bundle.css"],
+      additionalManifestEntries: production ? ["/build/bundle.js", "/build/bundle.css"] : [],
       cacheId: `neatBudget-${swVersion}`,
       navigateFallback: "/index.html",
       cleanupOutdatedCaches: true,
@@ -76,7 +75,6 @@ export default {
       runtimeCaching: [
         {
           urlPattern: ({ request }) => request.destination === "image",
-          // Apply a cache-first strategy.
           handler: "CacheFirst",
           options: {
             cacheName: "images",
