@@ -40,6 +40,8 @@ const config = netlify
         : _process.env.FIREBASE_MEASUREMENT_ID_DEV,
     };
 
+console.log(config);
+
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
