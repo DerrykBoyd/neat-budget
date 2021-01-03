@@ -10,13 +10,13 @@ const netlify = process.env.NETLIFY === "true";
 
 const config = netlify
   ? {
-      apiKey: FIREBASE_API_KEY_DEV,
-      authDomain: FIREBASE_AUTH_DOMAIN_DEV,
-      projectId: FIREBASE_PROJECT_ID_DEV,
-      storageBucket: FIREBASE_STORAGE_BUCKET_DEV,
-      messagingSenderId: FIREBASE_MESSAGING_ID_DEV,
-      appId: FIREBASE_APP_ID_DEV,
-      measurementId: FIREBASE_MEASUREMENT_ID_DEV,
+      apiKey: process.env.FIREBASE_API_KEY_DEV,
+      authDomain: process.env.FIREBASE_AUTH_DOMAIN_DEV,
+      projectId: process.env.FIREBASE_PROJECT_ID_DEV,
+      storageBucket: process.env.FIREBASE_STORAGE_BUCKET_DEV,
+      messagingSenderId: process.env.FIREBASE_MESSAGING_ID_DEV,
+      appId: process.env.FIREBASE_APP_ID_DEV,
+      measurementId: process.env.FIREBASE_MEASUREMENT_ID_DEV,
     }
   : {
       apiKey: production ? _process.env.FIREBASE_API_KEY : _process.env.FIREBASE_API_KEY_DEV,
