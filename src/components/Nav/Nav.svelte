@@ -1,6 +1,5 @@
 <script>
   import Link from "svelte-routing/src/Link.svelte";
-  import { fade } from "svelte/transition";
   import { clickOutside } from "utils/clickOutside";
   import { photoURL } from "store/user";
   import { currentPath } from "store/currentPath";

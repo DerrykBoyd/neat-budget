@@ -2,7 +2,6 @@
   import { currentPath } from "store/currentPath";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
-  import { fade } from "svelte/transition";
   import Cropper from "cropperjs";
   import "cropperjs/dist/cropper.css";
   import Button from "../components/Base/Button.svelte";
@@ -11,7 +10,6 @@
   import Modal from "../components/Base/Modal.svelte";
   import { displayName, photoURL, providerData, userEmail, isOnline } from "../store/user";
   import { cropSrc, cropImg } from "../store/profile";
-  import { modalLoaded } from "../store/modal";
   import { auth, db, functions, storage } from "../utils/firebase";
   import Loader from "../components/Base/Loader.svelte";
   import InfoMessage from "../components/Base/InfoMessage.svelte";

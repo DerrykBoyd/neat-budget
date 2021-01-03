@@ -3,10 +3,8 @@
   import { navigate } from "svelte-routing";
   import { currentPath } from "store/currentPath";
   import { userEmail, userLoaded } from "../store/user";
-  import { budgets } from "../store/budgets";
   import { ui, uiConfig } from "utils/firebase";
   import Loader from "../components/Base/Loader.svelte";
-  import Link from "svelte-routing/src/Link.svelte";
 
   let loggedIn = localStorage.getItem("loggedIn") === "true";
   currentPath.set("/");

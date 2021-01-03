@@ -5,7 +5,6 @@
   import { displayName } from "../store/user";
   import { budgets } from "../store/budgets";
   import Loader from "../components/Base/Loader.svelte";
-  import Button from "../components/Base/Button.svelte";
   import Sidebar from "../components/Budget/Sidebar.svelte";
   import Months from "../components/Budget/Months.svelte";
 
