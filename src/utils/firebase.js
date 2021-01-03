@@ -5,7 +5,7 @@ import "firebase/functions";
 import "firebase/storage";
 import * as firebaseui from "firebaseui";
 
-const production = _process.env.ENVIRONMENT === "production";
+const production = process.env.NODE_ENV === "production";
 
 const config = {
   apiKey: production ? _process.env.FIREBASE_API_KEY : _process.env.FIREBASE_API_KEY_DEV,
