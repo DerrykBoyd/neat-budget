@@ -12,6 +12,8 @@ import del from "rollup-plugin-delete";
 import { config } from "dotenv";
 
 const production = !process.env.ROLLUP_WATCH;
+const netlify = process.env.NETLIFY === "true";
+
 const swVersion = "0.0.1-3";
 
 let includePathOptions = {
@@ -56,6 +58,7 @@ export default {
           ...config().parsed,
         },
       }),
+      "process.env.NETLIFY": netlify,
       "process.env.NODE_ENV": production
         ? JSON.stringify("production")
         : JSON.stringify("development"),
