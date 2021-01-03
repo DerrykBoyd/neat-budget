@@ -15,13 +15,16 @@
       @apply text-gray-700 px-4 py-2;
       & .category {
         flex: 1 0 240px;
-        @apply py-2 sm:py-1;
+        max-width: 80vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       & .totals {
         flex: 1 0 260px;
         @apply py-2 sm:py-1;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
       }
     }
   }
