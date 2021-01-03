@@ -41,7 +41,6 @@
   {:else}
     <h1 class="text-2xl text-green-800">Home Page</h1>
     <div>Home page to go here</div>
-    <div>{process.env.NETLIFY}</div>
   {/if}
   <div id="firebaseui-auth-container" />
   <div id="loader" />

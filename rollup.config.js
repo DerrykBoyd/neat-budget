@@ -81,8 +81,6 @@ export default {
     generateSW({
       swDest: "public/service-worker.js",
       globDirectory: "public/",
-      // disable javascript and css pre-cache in dev for live reload
-      additionalManifestEntries: production ? ["/build/bundle.js", "/build/bundle.css"] : [],
       cacheId: `neatBudget-${swVersion}`,
       navigateFallback: "/index.html",
       cleanupOutdatedCaches: true,

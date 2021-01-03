@@ -3,13 +3,11 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
+import "firebase/analytics";
 import * as firebaseui from "firebaseui";
 
 const production = process.env.NODE_ENV === "production";
 const netlify = process.env.NETLIFY;
-
-console.log(process.env.FIREBASE_API_KEY_DEV);
-console.log({ netlify });
 
 const config = netlify
   ? {
@@ -41,9 +39,8 @@ const config = netlify
         : _process.env.FIREBASE_MEASUREMENT_ID_DEV,
     };
 
-console.log(config);
-
 firebase.initializeApp(config);
+firebase.analytics();
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
