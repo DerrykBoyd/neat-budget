@@ -3,20 +3,21 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/functions";
 import "firebase/storage";
+import "firebase/analytics";
 import * as firebaseui from "firebaseui";
 
 const production = process.env.NODE_ENV === "production";
-const netlify = process.env.NETLIFY === "true";
+const netlify = process.env.NETLIFY;
 
 const config = netlify
   ? {
-      apiKey: process.env.FIREBASE_API_KEY_DEV,
-      authDomain: process.env.FIREBASE_AUTH_DOMAIN_DEV,
-      projectId: process.env.FIREBASE_PROJECT_ID_DEV,
-      storageBucket: process.env.FIREBASE_STORAGE_BUCKET_DEV,
-      messagingSenderId: process.env.FIREBASE_MESSAGING_ID_DEV,
-      appId: process.env.FIREBASE_APP_ID_DEV,
-      measurementId: process.env.FIREBASE_MEASUREMENT_ID_DEV,
+      apiKey: JSON.stringify(process.env.FIREBASE_API_KEY_DEV),
+      authDomain: JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN_DEV),
+      projectId: JSON.stringify(process.env.FIREBASE_PROJECT_ID_DEV),
+      storageBucket: JSON.stringify(process.env.FIREBASE_STORAGE_BUCKET_DEV),
+      messagingSenderId: JSON.stringify(process.env.FIREBASE_MESSAGING_ID_DEV),
+      appId: JSON.stringify(process.env.FIREBASE_APP_ID_DEV),
+      measurementId: JSON.stringify(process.env.FIREBASE_MEASUREMENT_ID_DEV),
     }
   : {
       apiKey: production ? _process.env.FIREBASE_API_KEY : _process.env.FIREBASE_API_KEY_DEV,
@@ -39,6 +40,7 @@ const config = netlify
     };
 
 firebase.initializeApp(config);
+firebase.analytics();
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();

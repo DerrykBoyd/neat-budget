@@ -59,6 +59,19 @@ export default {
         },
       }),
       "process.env.NETLIFY": netlify,
+      "process.env.FIREBASE_API_KEY_DEV": JSON.stringify(process.env.FIREBASE_API_KEY_DEV),
+      "process.env.FIREBASE_APP_ID_DEV": JSON.stringify(process.env.FIREBASE_APP_ID_DEV),
+      "process.env.FIREBASE_AUTH_DOMAIN_DEV": JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN_DEV),
+      "process.env.FIREBASE_MEASUREMENT_ID_DEV": JSON.stringify(
+        process.env.FIREBASE_MEASUREMENT_ID_DEV
+      ),
+      "process.env.FIREBASE_MESSAGING_ID_DEV": JSON.stringify(
+        process.env.FIREBASE_MESSAGING_ID_DEV
+      ),
+      "process.env.FIREBASE_PROJECT_ID_DEV": JSON.stringify(process.env.FIREBASE_PROJECT_ID_DEV),
+      "process.env.FIREBASE_STORAGE_BUCKET_DEV": JSON.stringify(
+        process.env.FIREBASE_STORAGE_BUCKET_DEV
+      ),
       "process.env.NODE_ENV": production
         ? JSON.stringify("production")
         : JSON.stringify("development"),
@@ -68,8 +81,6 @@ export default {
     generateSW({
       swDest: "public/service-worker.js",
       globDirectory: "public/",
-      // disable javascript and css pre-cache in dev for live reload
-      additionalManifestEntries: production ? ["/build/bundle.js", "/build/bundle.css"] : [],
       cacheId: `neatBudget-${swVersion}`,
       navigateFallback: "/index.html",
       cleanupOutdatedCaches: true,
