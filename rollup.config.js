@@ -13,7 +13,6 @@ import { config } from "dotenv";
 
 const production = !process.env.ROLLUP_WATCH;
 const netlify = process.env.NETLIFY === "true";
-console.log(process.env.FIREBASE_API_KEY_DEV);
 
 const swVersion = "0.0.1-3";
 
@@ -60,13 +59,19 @@ export default {
         },
       }),
       "process.env.NETLIFY": netlify,
-      "process.env.FIREBASE_API_KEY_DEV": process.env.FIREBASE_API_KEY_DEV,
-      "process.env.FIREBASE_APP_ID_DEV": process.env.FIREBASE_APP_ID_DEV,
-      "process.env.FIREBASE_AUTH_DOMAIN_DEV": process.env.FIREBASE_AUTH_DOMAIN_DEV,
-      "process.env.FIREBASE_MEASUREMENT_ID_DEV": process.env.FIREBASE_MEASUREMENT_ID_DEV,
-      "process.env.FIREBASE_MESSAGING_ID_DEV": process.env.FIREBASE_MESSAGING_ID_DEV,
-      "process.env.FIREBASE_PROJECT_ID_DEV": process.env.FIREBASE_PROJECT_ID_DEV,
-      "process.env.FIREBASE_STORAGE_BUCKET_DEV": process.env.FIREBASE_STORAGE_BUCKET_DEV,
+      "process.env.FIREBASE_API_KEY_DEV": JSON.stringify(process.env.FIREBASE_API_KEY_DEV),
+      "process.env.FIREBASE_APP_ID_DEV": JSON.stringify(process.env.FIREBASE_APP_ID_DEV),
+      "process.env.FIREBASE_AUTH_DOMAIN_DEV": JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN_DEV),
+      "process.env.FIREBASE_MEASUREMENT_ID_DEV": JSON.stringify(
+        process.env.FIREBASE_MEASUREMENT_ID_DEV
+      ),
+      "process.env.FIREBASE_MESSAGING_ID_DEV": JSON.stringify(
+        process.env.FIREBASE_MESSAGING_ID_DEV
+      ),
+      "process.env.FIREBASE_PROJECT_ID_DEV": JSON.stringify(process.env.FIREBASE_PROJECT_ID_DEV),
+      "process.env.FIREBASE_STORAGE_BUCKET_DEV": JSON.stringify(
+        process.env.FIREBASE_STORAGE_BUCKET_DEV
+      ),
       "process.env.NODE_ENV": production
         ? JSON.stringify("production")
         : JSON.stringify("development"),
