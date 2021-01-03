@@ -118,6 +118,9 @@ export default {
       preprocess: sveltePreprocess({
         // https://github.com/kaisermann/svelte-preprocess/#user-content-options
         sourceMap: !production,
+        scss: {
+          includePaths: ["src"],
+        },
         postcss: {
           plugins: [require("tailwindcss"), require("autoprefixer"), require("postcss-nesting")],
         },

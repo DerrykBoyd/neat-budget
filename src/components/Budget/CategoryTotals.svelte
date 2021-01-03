@@ -1,33 +1,58 @@
 <script>
   export let currentBudget;
+  export let month;
 </script>
 
-<style>
+<style lang="scss">
   .totals-grid {
     display: grid;
-    grid-template-columns: minmax(360px, 1fr);
+    width: 100%;
+    & .totals-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      flex: 1;
+      @apply text-gray-700 px-4 py-2;
+      & .category {
+        flex: 1 0 240px;
+        @apply py-2 sm:py-1;
+      }
+      & .totals {
+        flex: 1 0 260px;
+        @apply py-2 sm:py-1;
+        display: flex;
+        justify-content: space-evenly;
+      }
+    }
   }
 </style>
 
 <div class="totals-grid divide-y">
-  <div class="flex flex-1 justify-between header px-8 py-1 text-gray-600 uppercase text-sm">
-    <span>Budgeted</span>
-    <span>Spent</span>
-    <span>Available</span>
+  <div class="totals-row uppercase text-base sm:text-sm">
+    {#if month === 'current'}
+      <p class="category font-bold">Category</p>
+    {/if}
+    <div class="totals">
+      <p>Budgeted</p>
+      <p>Spent</p>
+      <p>Available</p>
+    </div>
   </div>
   {#each currentBudget?.categoryGroups as group}
-    <p class="flex justify-between bg-green-100 py-1 px-8">
-      <span>$0.00</span>
-      <span>$0.00</span>
-      <span>$0.00</span>
-    </p>
+    <div class="totals-row bg-green-100 text-xl sm:text-base">
+      {#if month === 'current'}
+        <p class="category bg-green-100 font-bold">{group?.name}</p>
+      {/if}
+      <div class="totals"><span>$0.00</span> <span>$0.00</span> <span>$0.00</span></div>
+    </div>
     {#each currentBudget?.categories as category}
       {#if group?.id === category?.groupId}
-        <p class="flex justify-between px-8 py-1">
-          <span>$0.00</span>
-          <span>$0.00</span>
-          <span>$0.00</span>
-        </p>
+        <div class="totals-row text-xl sm:text-base">
+          {#if month === 'current'}
+            <p class="category">{category?.name}</p>
+          {/if}
+          <div class="totals"><span>$0.00</span> <span>$0.00</span> <span>$0.00</span></div>
+        </div>
       {/if}
     {/each}
   {/each}

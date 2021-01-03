@@ -1,5 +1,4 @@
 <script>
-  import CategoryList from "./CategoryList.svelte";
   import CategoryTotals from "./CategoryTotals.svelte";
 
   export let currentBudget;
@@ -46,12 +45,13 @@
     <div
       class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
       {shortNextMonth}
-      {nextMonth.getFullYear()}
+      {nextMonth?.getFullYear()}
     </div>
   </div>
   <div class="summary flex divide-x">
-    <div class="current-month h-28 bg-gray-100 month-summary flex justify-around items-center px-2">
-      <div class="flex flex-col text-sm text-gray-600">
+    <div
+      class="current-month py-2 sm:h-28 bg-gray-100 month-summary hidden sm:flex justify-around items-center px-2">
+      <div class="hidden sm:flex flex-col text-sm text-gray-600">
         <span>$0.00 Funds for {shortMonth}</span>
         <span>$0.00 Overspent for {shortPrevMonth}</span>
         <span>$0.00 Budgeted for {shortMonth}</span>
@@ -76,13 +76,19 @@
       </div>
     </div>
   </div>
-  <div class="categories flex overflow-y-scroll divide-x">
+  <div class="categories flex flex-col sm:flex-row overflow-y-scroll divide-x">
+    <div class="flex sm:hidden flex-col bg-gray-100">
+      <span class="text-xl text-green-700 text-center">{currentBudget.name}</span>
+      <div class="text-green-700 flex flex-col items-center">
+        <span class="font-medium text-4xl">$1,000</span>
+        <span>Available to Budget</span>
+      </div>
+    </div>
     <div class="current-month flex">
-      <CategoryList {currentBudget} />
-      <CategoryTotals {currentBudget} />
+      <CategoryTotals {currentBudget} month="current" />
     </div>
     <div class="next-month flex flex-col">
-      <CategoryTotals {currentBudget} />
+      <CategoryTotals {currentBudget} month="next" />
     </div>
   </div>
 </div>
