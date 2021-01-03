@@ -14,7 +14,7 @@ import { config } from "dotenv";
 const production = !process.env.ROLLUP_WATCH;
 const netlify = process.env.NETLIFY === "true";
 
-const swVersion = "0.0.1-3";
+const swVersion = "0.0.1-4";
 
 let includePathOptions = {
   include: {},
