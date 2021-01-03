@@ -40,7 +40,7 @@ const config = netlify
     };
 
 firebase.initializeApp(config);
-if (netlify) firebase.analytics();
+if (!netlify) firebase.analytics();
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();
