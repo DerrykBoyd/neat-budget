@@ -13,6 +13,7 @@ import { config } from "dotenv";
 
 const production = !process.env.ROLLUP_WATCH;
 const netlify = process.env.NETLIFY === "true";
+console.log(process.env.FIREBASE_API_KEY_DEV);
 
 const swVersion = "0.0.1-3";
 

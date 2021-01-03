@@ -8,6 +8,8 @@ import * as firebaseui from "firebaseui";
 const production = process.env.NODE_ENV === "production";
 const netlify = process.env.NETLIFY === "true";
 
+console.log(process.env.FIREBASE_API_KEY_DEV);
+
 const config = netlify
   ? {
       apiKey: process.env.FIREBASE_API_KEY_DEV,
