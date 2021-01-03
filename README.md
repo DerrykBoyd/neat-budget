@@ -1,10 +1,8 @@
-*Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# Neat Budget
 
----
+A zero based budgeting progressive web app, developed using Svelte and [Firebase](https://firebase.google.com).
 
-# svelte app
-
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+This project was bootstrapped with this project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
 
 To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
 
@@ -25,7 +23,45 @@ cd svelte-app
 npm install
 ```
 
-...then start [Rollup](https://rollupjs.org):
+This project needs a connected firebase project to run. You can create a firebase project [here](https://firebase.google.com) once you have created your firebase project create a .env file based on the .env-example and replace the firebase config values.
+
+#### Deploy Firebase Functions and Rules
+
+This app uses firebase functions which requires a Blaze firebase plan. Upgrade your plan using the firebase console and install the firebase cli tools.
+
+```bash
+npm install -g firebase-tools
+```
+
+Login to your firebase account
+
+```bash
+firebase login
+```
+
+Initialize your firebase project
+
+```bash
+firebase init
+```
+
+Deploy the firebase security rules for storage and firestore
+
+```bash
+firebase deploy --only storage, firestore
+```
+
+Navigate to the functions dir and deploy
+
+```bash
+cd functions/
+npm install
+firebase deploy --only functions
+```
+
+#### Start the development server
+
+Start [Rollup](https://rollupjs.org):
 
 ```bash
 npm run dev
@@ -39,7 +75,7 @@ If you're using [Visual Studio Code](https://code.visualstudio.com/) we recommen
 
 ## Building and running in production mode
 
-To create an optimised version of the app:
+To create an optimized version of the app:
 
 ```bash
 npm run build
@@ -56,50 +92,4 @@ If you're building a single-page app (SPA) with multiple routes, sirv needs to b
 
 ```js
 "start": "sirv public --single"
-```
-
-## Using TypeScript
-
-This template comes with a script to set up a TypeScript development environment, you can run it immediately after cloning the template with:
-
-```bash
-node scripts/setupTypeScript.js
-```
-
-Or remove the script via:
-
-```bash
-rm scripts/setupTypeScript.js
-```
-
-## Deploying to the web
-
-### With [Vercel](https://vercel.com)
-
-Install `vercel` if you haven't already:
-
-```bash
-npm install -g vercel
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-vercel deploy --name my-project
-```
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
 ```
