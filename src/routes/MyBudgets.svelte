@@ -3,7 +3,15 @@
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
   import { userLoaded } from "../store/user";
-  import { sortedBudgets, createBudget, accountTypes } from "../store/budgets";
+  import {
+    sortedBudgets,
+    createBudget,
+    accountTypes,
+    newAccountBalance,
+    newAccountError,
+    newAccountName,
+    newAccountType,
+  } from "../store/budgets";
   import Loader from "../components/Base/Loader.svelte";
   import Button from "../components/Base/Button.svelte";
   import { auth, db } from "../utils/firebase";
@@ -18,6 +26,7 @@
   import InputNumber from "../components/Base/InputNumber.svelte";
   import { nanoid } from "nanoid";
   import currency from "currency.js";
+  import AddAccountForm from "../components/Budget/AddAccountForm.svelte";
 
   currentPath.set("/settings");
   // redirect to home if not logged in.
@@ -28,10 +37,6 @@
 
   let budgetName = "";
   let budgetNameError = "";
-  let newAccountType = "Checking";
-  let newAccountName = "";
-  let newAccountBalance;
-  let newAccountError;
   let defaultSaved = false;
   let newBudgetModal = false;
   let currencyFormat = "USD";
@@ -58,25 +63,28 @@
 
   function addBudget() {
     budgetNameError = "";
-    if (!newAccountName || !newAccountType || !newAccountBalance) {
-      newAccountError = "All fields are required";
+    if (!$newAccountName || !$newAccountType || !$newAccountBalance) {
+      newAccountError.set("All fields are required");
       return;
     }
     let accounts = [
       {
         id: nanoid(),
-        name: newAccountName,
-        type: newAccountType,
-        onBudget: $accountTypes.find((type) => type.name === newAccountType).type === "Budget",
+        name: $newAccountName,
+        type: $newAccountType,
+        onBudget: $accountTypes.find((type) => type.name === $newAccountType).type === "Budget",
         closed: false,
-        balance: currency(newAccountBalance).value,
+        balance: currency($newAccountBalance).value,
         clearedBalance: 0,
         deleted: false,
       },
     ];
     let newBudget = createBudget(budgetName, currencyFormat, accounts);
-    db.collection("budgets").add(newBudget);
+    db.collection("budgets").doc(newBudget.id).set(newBudget);
     toggleModal();
+    newAccountType.set("Checking");
+    newAccountName.set("");
+    newAccountBalance.set(0);
     budgetName = "";
   }
 
@@ -151,32 +159,7 @@
             label="Currency Format" />
         </div>
       {:else}
-        <h3 class="text-xl font-bold">Add an Account</h3>
-        <p class="py-2">
-          Add your first spending account to record your transactions. Neat Budget works best when
-          you add all your spending accounts. You can add your other accounts on the next screen.
-        </p>
-        <SelectGroups
-          bind:value={newAccountType}
-          label="Account Type"
-          groups={[...new Set($accountTypes.map((account) => account.type))]}
-          options={$accountTypes} />
-        <Input
-          bind:value={newAccountName}
-          name="account-name"
-          placeholder="Account Nickname"
-          label="Account Nickname" />
-        <InputNumber
-          bind:value={newAccountBalance}
-          name="account-balance"
-          placeholder="0.00"
-          min="0"
-          step="0.01"
-          label="Account Balance" />
-        <span class="py-1 text-sm text-gray-600">What is the current balance of this account?</span>
-        {#if newAccountError}
-          <InfoMessage icon="error" color="text-red-800">{newAccountError}</InfoMessage>
-        {/if}
+        <AddAccountForm onboarding />
       {/if}
       <div slot="actions" class="relative flex justify-end items-center">
         {#if $modalStatus === 'settings'}

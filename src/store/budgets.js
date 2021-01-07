@@ -128,3 +128,8 @@ export const accountTypes = readable([
   { name: "Other Asset", type: "Tracking" },
   { name: "Other Liability", type: "Tracking" },
 ]);
+
+export const newAccountBalance = writable(null);
+export const newAccountError = writable("");
+export const newAccountName = writable("");
+export const newAccountType = writable("Checking");
