@@ -105,38 +105,33 @@
               "spent": "int",
               "note": "string"
             }
-          }
-        }
-      },
-      "Transaction": {
-        "id": "string(uuid)",
-        "date": "string(date)",
-        "amount": "int",
-        "note": "string",
-        "cleared": "enum[cleared, uncleared, reconciled]",
-        "approved": "boolean",
-        "accountId": "string(uuid)",
-        "accountName": "string",
-        "payeeId": "string(uuid)",
-        "payeeName": "string",
-        "categoryId": "string(uuid)",
-        "categoryName": "string",
-        "transferAccountId": "string(uuid)",
-        "transferAccountName": "string",
-        "deleted": "boolean",
-        "subTransactions": {
-          "arrayOfObjects": {
-            "id": "string(uuid)",
-            "amount": "int",
-            "note": "string",
-            "payeeId": "string(uuid)",
-            "payeeName": "string",
-            "categoryId": "string(uuid)",
-            "categoryName": "string",
-            "transferAccountId": "string(uuid)",
-            "transferAccountName": "string",
-            "deleted": "boolean"
-          }
+          },
+          "transactions(arrayOfObjects)": [
+            {
+              "id": "string(uuid)",
+              "date": "string(date)",
+              "amount": "int",
+              "note": "string",
+              "cleared": "enum[cleared, uncleared, reconciled]",
+              "approved": "boolean",
+              "accountId": "string(uuid)",
+              "payeeId": "string(uuid)",
+              "categoryId": "string(uuid)",
+              "transferAccountId": "string(uuid)",
+              "deleted": "boolean",
+              "subTransactions": {
+                "arrayOfObjects": {
+                  "id": "string(uuid)",
+                  "amount": "int",
+                  "note": "string",
+                  "payeeId": "string(uuid)",
+                  "categoryId": "string(uuid)",
+                  "transferAccountId": "string(uuid)",
+                  "deleted": "boolean"
+                }
+              }
+            }
+          ]
         }
       }
     }

@@ -1,6 +1,6 @@
 <script>
   import { scale } from "svelte/transition";
-  import { modalLoaded } from "../../store/modal";
+  import { modalLoaded, modalStatus } from "../../store/modal";
 
   export let showModal = false;
 </script>
