@@ -40,6 +40,7 @@
   let defaultSaved = false;
   let newBudgetModal = false;
   let currencyFormat = "USD";
+  let savingDefault = false;
 
   const toggleModal = () => {
     if (newBudgetModal) {

@@ -14,6 +14,8 @@
     newAccountBalance,
     newAccountError,
   } from "../../store/budgets";
+  import { faPlus } from "@fortawesome/free-solid-svg-icons";
+  import Fa from "svelte-fa";
 
   export let currentBudget;
 
@@ -96,7 +98,8 @@
     {/each}
     <div class="px-4">
       <Button handleClick={() => (addAccountMoal = true)} inverted color="white">
-        + Add Account
+        <Fa style="margin-right: 0.5rem" icon={faPlus} />
+        <span>Add Account</span>
       </Button>
     </div>
   </div>
