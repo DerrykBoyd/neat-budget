@@ -1,10 +1,9 @@
 <script>
-  import { Router, Link, Route, navigate } from "svelte-routing";
+  import { Router, Route } from "svelte-routing";
   import Nav from "components/Nav/Nav";
   import Home from "routes/Home";
   import About from "routes/About";
   import Settings from "routes/Settings";
-  import { auth } from "utils/firebase";
   import Profile from "routes/Profile";
   import MyBudgets from "./routes/MyBudgets.svelte";
   import Budget from "./routes/Budget.svelte";

@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, readable } from "svelte/store";
 import { nanoid } from "nanoid";
 import { auth, db } from "../utils/firebase";
 
@@ -88,7 +88,7 @@ const createCategoryGroups = () => {
   };
 };
 
-export const createBudget = (name, currencyCode = "USD") => {
+export const createBudget = (name, currencyCode = "USD", accounts = []) => {
   let now = new Date();
   const { categoryGroups, categories } = createCategoryGroups();
   const newBudget = {
@@ -100,7 +100,7 @@ export const createBudget = (name, currencyCode = "USD") => {
     firstMonth: new Date(now.getFullYear(), now.getMonth()).toISOString(),
     lastOpened: Date.now(),
     currencyCode,
-    accounts: [],
+    accounts: accounts,
     categoryGroups: categoryGroups,
     categories: categories,
     months: [],
@@ -116,3 +116,15 @@ export const budgets = writable([], () => {
 export const sortedBudgets = derived(budgets, ($budgets) =>
   $budgets.sort((a, b) => a.createdTime - b.createdTime)
 );
+
+export const accountTypes = readable([
+  { name: "Checking", type: "Budget" },
+  { name: "Savings", type: "Budget" },
+  { name: "Credit Card", type: "Budget" },
+  { name: "Cash", type: "Budget" },
+  { name: "Line of Credit", type: "Budget" },
+  { name: "Mortgage", type: "Tracking" },
+  { name: "Investment Account", type: "Tracking" },
+  { name: "Other Asset", type: "Tracking" },
+  { name: "Other Liability", type: "Tracking" },
+]);
