@@ -3,10 +3,11 @@
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
   import { displayName } from "../store/user";
-  import { budgets } from "../store/budgets";
+  import { budgets, selectedAccount } from "../store/budgets";
   import Loader from "../components/Base/Loader.svelte";
   import Sidebar from "../components/Budget/Sidebar.svelte";
   import Months from "../components/Budget/Months.svelte";
+  import Account from "../components/Budget/Account.svelte";
 
   export let id;
   let currentBudget = null;
@@ -18,6 +19,8 @@
   onMount(() => {
     if (!loggedIn) navigate("/");
   });
+
+  selectedAccount.set("Budget");
 </script>
 
 <style>
@@ -44,7 +47,11 @@
   {:else}
     <div class="budget">
       <Sidebar {currentBudget} />
-      <Months {currentBudget} {currentMonth} />
+      {#if $selectedAccount === 'Budget'}
+        <Months {currentBudget} {currentMonth} />
+      {:else}
+        <Account />
+      {/if}
     </div>
   {/if}
 {:else}

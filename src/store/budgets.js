@@ -133,3 +133,4 @@ export const newAccountBalance = writable(null);
 export const newAccountError = writable("");
 export const newAccountName = writable("");
 export const newAccountType = writable("Checking");
+export const selectedAccount = writable(null);

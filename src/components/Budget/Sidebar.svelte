@@ -16,6 +16,7 @@
   } from "../../store/budgets";
   import { faPlus } from "@fortawesome/free-solid-svg-icons";
   import Fa from "svelte-fa";
+  import SidebarLink from "./SidebarLink.svelte";
 
   export let currentBudget;
 
@@ -59,14 +60,7 @@
     max-height: 56px;
     overflow: hidden;
   }
-  .sidebar-link {
-    @apply px-4;
-    @apply py-2;
-    cursor: pointer;
-    &:hover {
-      @apply bg-green-700;
-    }
-  }
+
   @media (min-width: 1024px) {
     .sidebar {
       display: flex;
@@ -80,20 +74,20 @@
     {currentBudget.name}
   </div>
   <div class="sidebar-links">
-    <div class="sidebar-link">Budget Link</div>
-    <div class="sidebar-link">All Accounts Link</div>
+    <SidebarLink name={'Budget'} accountId="Budget" />
+    <SidebarLink name={'All Accounts'} accountId="All" />
   </div>
   <div class="sidebar-accounts grid grid-cols-1 overflow-y-auto">
     <div class="px-4 pt-2 pb-1 underline font-medium">On Budget Accounts</div>
     {#each currentBudget.accounts as account}
       {#if account.onBudget}
-        <div class="sidebar-link">{account.name}</div>
+        <SidebarLink name={account.name} balance={account.balance} accountId={account.id} />
       {/if}
     {/each}
     <div class="px-4 pt-2 pb-1 underline font-medium">Off Budget Accounts</div>
     {#each currentBudget.accounts as account}
       {#if !account.onBudget}
-        <div class="sidebar-link">{account.name}</div>
+        <SidebarLink name={account.name} balance={account.balance} accountId={account.id} />
       {/if}
     {/each}
     <div class="px-4">
