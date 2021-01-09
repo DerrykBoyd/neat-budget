@@ -18,7 +18,7 @@
       "name": "string",
       "firstMonth": "timeStamp",
       "currencyCode": "enum[list of currency codes]",
-      "Accounts": {
+      "accounts": {
         "arrayOfObjects": {
           "id": "string(uuid)",
           "name": "string",
@@ -30,8 +30,36 @@
           "deleted": "boolean"
         }
       },
-      "ScheduledTransactions": {
-        "ScheduledTransaction": {
+      "Transactions(subcollection)": {
+        "Transaction(doc:id)": [
+          {
+            "id": "string(uuid)",
+            "date": "string(date)",
+            "amount": "int",
+            "note": "string",
+            "cleared": "enum[cleared, uncleared, reconciled]",
+            "approved": "boolean",
+            "accountId": "string(uuid)",
+            "payeeId": "string(uuid)",
+            "categoryId": "string(uuid)",
+            "transferAccountId": "string(uuid)",
+            "deleted": "boolean",
+            "subTransactions": {
+              "arrayOfObjects": {
+                "id": "string(uuid)",
+                "amount": "int",
+                "note": "string",
+                "payeeId": "string(uuid)",
+                "categoryId": "string(uuid)",
+                "transferAccountId": "string(uuid)",
+                "deleted": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "ScheduledTransactions(subcollection)": {
+        "ScheduledTransaction(doc:id)": {
           "id": "string(uuid)",
           "dateFirst": "string(date)",
           "dateNext": "string(date)",
@@ -91,7 +119,7 @@
           "deleted": "boolean"
         }
       },
-      "Months": {
+      "Months(subcollection)": {
         "Month(timestamp for year and month)": {
           "month": "timeStamp",
           "note": "string",
@@ -105,33 +133,7 @@
               "spent": "int",
               "note": "string"
             }
-          },
-          "transactions(arrayOfObjects)": [
-            {
-              "id": "string(uuid)",
-              "date": "string(date)",
-              "amount": "int",
-              "note": "string",
-              "cleared": "enum[cleared, uncleared, reconciled]",
-              "approved": "boolean",
-              "accountId": "string(uuid)",
-              "payeeId": "string(uuid)",
-              "categoryId": "string(uuid)",
-              "transferAccountId": "string(uuid)",
-              "deleted": "boolean",
-              "subTransactions": {
-                "arrayOfObjects": {
-                  "id": "string(uuid)",
-                  "amount": "int",
-                  "note": "string",
-                  "payeeId": "string(uuid)",
-                  "categoryId": "string(uuid)",
-                  "transferAccountId": "string(uuid)",
-                  "deleted": "boolean"
-                }
-              }
-            }
-          ]
+          }
         }
       }
     }
