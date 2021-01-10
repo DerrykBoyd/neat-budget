@@ -1,7 +1,7 @@
 <script>
   import Fa from "svelte-fa";
   import ArrowButton from "../Base/ArrowButton.svelte";
-
+  import sizeOf from "firestore-size";
   import Button from "../Base/Button.svelte";
   import CategoryTotals from "./CategoryTotals.svelte";
 
@@ -17,12 +17,18 @@
   let nextMonth;
 
   $: console.log({ currentBudget });
+  $: console.log(sizeOf(currentBudget));
   $: currentMonth = new Date(monthsData[currentMonthIndex].month);
   $: shortMonth = currentMonth?.toLocaleString("default", { month: "short" });
   $: prevMonth = new Date(currentMonth?.getFullYear(), currentMonth?.getMonth() - 1);
   $: shortPrevMonth = prevMonth?.toLocaleString("default", { month: "short" });
   $: nextMonth = new Date(currentMonth?.getFullYear(), currentMonth?.getMonth() + 1);
   $: shortNextMonth = nextMonth?.toLocaleString("default", { month: "short" });
+
+  function switchMonth(ind) {
+    if (ind < 0 || ind > monthsData.length) return;
+    currentMonthIndex = ind;
+  }
 </script>
 
 <style>
@@ -30,6 +36,13 @@
     display: grid;
     grid-template-rows: auto auto 1fr;
   }
+  .month-text {
+    min-width: 200px;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
   .current-month {
     flex: 1 1 600px;
   }
@@ -51,10 +64,15 @@
   <div class="header flex divide-x">
     <div
       class="current-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
-      <ArrowButton handleClick={() => currentMonthIndex--}>{'<'}</ArrowButton>
-      {shortMonth}
-      {currentMonth?.getFullYear()}
-      <ArrowButton handleClick={() => currentMonthIndex++}>Next</ArrowButton>
+      <ArrowButton
+        handleClick={() => currentMonthIndex--}
+        direction="left"
+        disabled={currentMonthIndex === 0} />
+      <div class="month-text">{shortMonth} {currentMonth?.getFullYear()}</div>
+      <ArrowButton
+        handleClick={() => currentMonthIndex++}
+        direction="right"
+        disabled={currentMonthIndex === monthsData.length} />
     </div>
     <div
       class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
