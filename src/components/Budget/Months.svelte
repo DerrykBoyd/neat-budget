@@ -1,12 +1,23 @@
 <script>
+  import Fa from "svelte-fa";
+  import ArrowButton from "../Base/ArrowButton.svelte";
+
+  import Button from "../Base/Button.svelte";
   import CategoryTotals from "./CategoryTotals.svelte";
 
   export let currentBudget;
-  export let currentMonth;
+  let monthsData = currentBudget.months;
+  const now = new Date();
+  let currentMonth = new Date(now.getFullYear(), now.getMonth());
+  let currentMonthIndex = currentBudget?.months?.findIndex(
+    (month) => month.month === currentMonth.valueOf()
+  );
+  console.log(currentMonthIndex);
   let prevMonth;
   let nextMonth;
 
   $: console.log({ currentBudget });
+  $: currentMonth = new Date(monthsData[currentMonthIndex].month);
   $: shortMonth = currentMonth?.toLocaleString("default", { month: "short" });
   $: prevMonth = new Date(currentMonth?.getFullYear(), currentMonth?.getMonth() - 1);
   $: shortPrevMonth = prevMonth?.toLocaleString("default", { month: "short" });
@@ -40,8 +51,10 @@
   <div class="header flex divide-x">
     <div
       class="current-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
+      <ArrowButton handleClick={() => currentMonthIndex--}>{'<'}</ArrowButton>
       {shortMonth}
       {currentMonth?.getFullYear()}
+      <ArrowButton handleClick={() => currentMonthIndex++}>Next</ArrowButton>
     </div>
     <div
       class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
