@@ -6,6 +6,7 @@
   let prevMonth;
   let nextMonth;
 
+  $: console.log({ currentBudget });
   $: shortMonth = currentMonth?.toLocaleString("default", { month: "short" });
   $: prevMonth = new Date(currentMonth?.getFullYear(), currentMonth?.getMonth() - 1);
   $: shortPrevMonth = prevMonth?.toLocaleString("default", { month: "short" });

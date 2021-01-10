@@ -88,6 +88,25 @@ const createCategoryGroups = () => {
   };
 };
 
+const createMonths = () => {
+  const now = new Date();
+  const firstYear = now.getFullYear();
+  let month = now.getMonth();
+  let months = [];
+  // create 100 years of months
+  for (let i = 0; i < 120; i++) {
+    months.push({
+      month: new Date(firstYear, month + i).valueOf(),
+      note: "",
+      income: 0,
+      budgeted: 0,
+      spent: 0,
+      categories: {},
+    });
+  }
+  return months;
+};
+
 export const createBudget = (name, currencyCode = "USD", accounts = []) => {
   let now = new Date();
   const { categoryGroups, categories } = createCategoryGroups();
@@ -103,7 +122,7 @@ export const createBudget = (name, currencyCode = "USD", accounts = []) => {
     accounts: accounts,
     categoryGroups: categoryGroups,
     categories: categories,
-    months: [],
+    months: createMonths(),
   };
   return newBudget;
 };

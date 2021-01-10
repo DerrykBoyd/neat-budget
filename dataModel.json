@@ -30,7 +30,7 @@
           "deleted": "boolean"
         }
       },
-      "Transactions(subcollection)": {
+      "Transactions(sub-collection)": {
         "Transaction(doc:id)": [
           {
             "id": "string(uuid)",
@@ -58,7 +58,7 @@
           }
         ]
       },
-      "ScheduledTransactions(subcollection)": {
+      "ScheduledTransactions(sub-collection)": {
         "ScheduledTransaction(doc:id)": {
           "id": "string(uuid)",
           "dateFirst": "string(date)",
@@ -91,8 +91,8 @@
           }
         }
       },
-      "Payees": {
-        "arrayOfObjects": {
+      "Payees(sub-collection)": {
+        "Payee(doc:id)": {
           "id": "string(uuid)",
           "name": "string",
           "lastCategory": "string",
@@ -119,14 +119,13 @@
           "deleted": "boolean"
         }
       },
-      "Months(subcollection)": {
-        "Month(timestamp for year and month)": {
+      "months": {
+        "arrayOfObjects": {
           "month": "timeStamp",
           "note": "string",
           "income": "int",
           "budgeted": "int",
           "spent": "int",
-          "deleted": "boolean",
           "categories": {
             "categoryId": {
               "budgeted": "int",
