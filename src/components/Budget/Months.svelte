@@ -1,8 +1,6 @@
 <script>
-  import Fa from "svelte-fa";
   import ArrowButton from "../Base/ArrowButton.svelte";
   import sizeOf from "firestore-size";
-  import Button from "../Base/Button.svelte";
   import CategoryTotals from "./CategoryTotals.svelte";
 
   export let currentBudget;
