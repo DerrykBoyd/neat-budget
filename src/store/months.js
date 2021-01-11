@@ -25,6 +25,10 @@ function createMonths() {
   };
 }
 
+export function updateMonth(budgetId, month) {
+  db.collection("budgets").doc(budgetId).collection("months").doc(month.month).set(month);
+}
+
 export function newMonth(monthTimestamp) {
   return {
     month: monthTimestamp,
