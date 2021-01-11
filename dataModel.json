@@ -18,7 +18,7 @@
       "name": "string",
       "firstMonth": "timeStamp",
       "currencyCode": "enum[list of currency codes]",
-      "Accounts": {
+      "accounts": {
         "arrayOfObjects": {
           "id": "string(uuid)",
           "name": "string",
@@ -30,8 +30,36 @@
           "deleted": "boolean"
         }
       },
-      "ScheduledTransactions": {
-        "ScheduledTransaction": {
+      "Transactions(sub-collection)": {
+        "Transaction(doc:id)": [
+          {
+            "id": "string(uuid)",
+            "date": "string(date)",
+            "amount": "int",
+            "note": "string",
+            "cleared": "enum[cleared, uncleared, reconciled]",
+            "approved": "boolean",
+            "accountId": "string(uuid)",
+            "payeeId": "string(uuid)",
+            "categoryId": "string(uuid)",
+            "transferAccountId": "string(uuid)",
+            "deleted": "boolean",
+            "subTransactions": {
+              "arrayOfObjects": {
+                "id": "string(uuid)",
+                "amount": "int",
+                "note": "string",
+                "payeeId": "string(uuid)",
+                "categoryId": "string(uuid)",
+                "transferAccountId": "string(uuid)",
+                "deleted": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "ScheduledTransactions(sub-collection)": {
+        "ScheduledTransaction(doc:id)": {
           "id": "string(uuid)",
           "dateFirst": "string(date)",
           "dateNext": "string(date)",
@@ -63,8 +91,8 @@
           }
         }
       },
-      "Payees": {
-        "arrayOfObjects": {
+      "Payees(sub-collection)": {
+        "Payee(doc:id)": {
           "id": "string(uuid)",
           "name": "string",
           "lastCategory": "string",
@@ -91,47 +119,20 @@
           "deleted": "boolean"
         }
       },
-      "Months": {
-        "Month(timestamp for year and month)": {
+      "Months(sub-collection)": {
+        "Month(doc:month)": {
           "month": "timeStamp",
           "note": "string",
           "income": "int",
           "budgeted": "int",
           "spent": "int",
-          "deleted": "boolean",
           "categories": {
             "categoryId": {
               "budgeted": "int",
               "spent": "int",
               "note": "string"
             }
-          },
-          "transactions(arrayOfObjects)": [
-            {
-              "id": "string(uuid)",
-              "date": "string(date)",
-              "amount": "int",
-              "note": "string",
-              "cleared": "enum[cleared, uncleared, reconciled]",
-              "approved": "boolean",
-              "accountId": "string(uuid)",
-              "payeeId": "string(uuid)",
-              "categoryId": "string(uuid)",
-              "transferAccountId": "string(uuid)",
-              "deleted": "boolean",
-              "subTransactions": {
-                "arrayOfObjects": {
-                  "id": "string(uuid)",
-                  "amount": "int",
-                  "note": "string",
-                  "payeeId": "string(uuid)",
-                  "categoryId": "string(uuid)",
-                  "transferAccountId": "string(uuid)",
-                  "deleted": "boolean"
-                }
-              }
-            }
-          ]
+          }
         }
       }
     }

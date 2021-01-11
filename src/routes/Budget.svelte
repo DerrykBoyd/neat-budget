@@ -11,7 +11,6 @@
 
   export let id;
   let currentBudget = null;
-  let currentMonth = new Date();
   $: currentBudget = $budgets.find((budget) => budget.id === id);
   currentPath.set(`/budget/${id}`);
   // redirect to home if not logged in.
@@ -48,7 +47,7 @@
     <div class="budget">
       <Sidebar {currentBudget} />
       {#if $selectedAccount === 'Budget'}
-        <Months {currentBudget} {currentMonth} />
+        <Months {currentBudget} />
       {:else}
         <Account />
       {/if}
