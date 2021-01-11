@@ -57,11 +57,13 @@
   .next-month {
     display: none;
   }
+  .scroll-margin {
+    margin-right: 15px;
+  }
   @media (min-width: 1280px) {
     .next-month {
       display: flex;
       width: 450px;
-      margin-right: 15px;
     }
   }
 </style>
@@ -81,7 +83,7 @@
         disabled={currentMonthIndex === availableMonths.length} />
     </div>
     <div
-      class="next-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
+      class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
       {shortNextMonth}
       {nextMonth?.getFullYear()}
     </div>
