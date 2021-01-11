@@ -103,6 +103,11 @@
       shortPrevMonth={shortCurrentMonth} />
   </div>
   <div class="categories flex flex-col sm:flex-row overflow-y-scroll divide-x">
+    <div class="text-green-700 sm:hidden flex flex-col items-center">
+      <span class="text-xl text-green-700 sm:hidden text-center">{currentBudget.name}</span>
+      <span class="font-medium text-4xl">{currency(currentMonthAvailable).format()}</span>
+      <span>Available to Budget</span>
+    </div>
     <div class="current-month flex">
       <CategoryTotals {currentBudget} month="current" monthData={currentMonthData} />
     </div>

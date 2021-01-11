@@ -29,7 +29,7 @@
 <div
   class:nextMonth
   class:currentMonth={!nextMonth}
-  class="py-2 sm:h-28 bg-gray-100 flex justify-around items-center px-2">
+  class="py-2 sm:h-28 bg-gray-100 hidden sm:flex justify-around items-center px-2">
   <div class="hidden sm:flex flex-col text-sm text-gray-600">
     <span>{currency(monthData?.income || 0).format()} Funds for {shortMonth}</span>
     <span>{currency(carryOver || 0).format()}
