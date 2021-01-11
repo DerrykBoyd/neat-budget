@@ -51,9 +51,9 @@
       <p class="category font-bold">Totals</p>
     {/if}
     <div class="totals font-bold">
-      <p>{currency(monthData.budgeted).format()}</p>
-      <p>{currency(monthData.spent).format()}</p>
-      <p>{currency(monthData.budgeted - monthData.spent).format()}</p>
+      <p>{currency(monthData?.budgeted || 0).format()}</p>
+      <p>{currency(monthData?.spent || 0).format()}</p>
+      <p>{currency(monthData?.budgeted - monthData?.spent || 0).format()}</p>
     </div>
   </div>
   {#each currentBudget?.categoryGroups as group}
