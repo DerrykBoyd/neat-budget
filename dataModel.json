@@ -119,8 +119,8 @@
           "deleted": "boolean"
         }
       },
-      "months": {
-        "arrayOfObjects": {
+      "Months(sub-collection)": {
+        "Month(doc:month)": {
           "month": "timeStamp",
           "note": "string",
           "income": "int",

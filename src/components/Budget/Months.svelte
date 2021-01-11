@@ -1,30 +1,40 @@
 <script>
   import ArrowButton from "../Base/ArrowButton.svelte";
-  import sizeOf from "firestore-size";
   import CategoryTotals from "./CategoryTotals.svelte";
+  import { months, newMonth } from "../../store/months";
+  import currency from "currency.js";
+  import MonthSummary from "./MonthSummary.svelte";
 
   export let currentBudget;
-  let monthsData = currentBudget.months;
+
+  const availableMonths = currentBudget.availableMonths;
   const now = new Date();
   let currentMonth = new Date(now.getFullYear(), now.getMonth());
-  let currentMonthIndex = currentBudget?.months?.findIndex(
-    (month) => month.month === currentMonth.valueOf()
+  let currentMonthIndex = currentBudget?.availableMonths?.findIndex(
+    (month) => month === currentMonth.valueOf()
   );
-  console.log(currentMonthIndex);
-  let prevMonth;
-  let nextMonth;
 
-  $: console.log({ currentBudget });
-  $: console.log(sizeOf(currentBudget));
-  $: currentMonth = new Date(monthsData[currentMonthIndex].month);
-  $: shortMonth = currentMonth?.toLocaleString("default", { month: "short" });
+  $: console.log({ currentBudget }); // log the state
+  $: console.log({ $months }); // log the state
+
+  $: currentMonth = new Date(availableMonths[currentMonthIndex]);
+  $: shortCurrentMonth = currentMonth?.toLocaleString("default", { month: "short" });
   $: prevMonth = new Date(currentMonth?.getFullYear(), currentMonth?.getMonth() - 1);
   $: shortPrevMonth = prevMonth?.toLocaleString("default", { month: "short" });
   $: nextMonth = new Date(currentMonth?.getFullYear(), currentMonth?.getMonth() + 1);
   $: shortNextMonth = nextMonth?.toLocaleString("default", { month: "short" });
 
+  $: prevMonthData = $months[prevMonth.valueOf()] || null;
+  $: currentMonthData = $months[currentMonth.valueOf()] || null;
+  $: currentMonthCarryover = prevMonthData?.income - prevMonthData?.spent || 0;
+  $: currentMonthAvailable =
+    currentMonthData?.income + currentMonthCarryover - currentMonthData?.budgeted || 0;
+  $: nextMonthData = $months[nextMonth.valueOf()] || null;
+  $: nextMonthCarryover = currentMonthData?.income - currentMonthData?.spent || 0;
+  $: nextMonthAvailable = nextMonthData?.income + nextMonthCarryover - nextMonthData?.budgeted || 0;
+
   function switchMonth(ind) {
-    if (ind < 0 || ind > monthsData.length) return;
+    if (ind < 0 || ind > availableMonths.length) return;
     currentMonthIndex = ind;
   }
 </script>
@@ -47,13 +57,11 @@
   .next-month {
     display: none;
   }
-  .scroll-margin {
-    margin-right: 15px;
-  }
   @media (min-width: 1280px) {
     .next-month {
       display: flex;
       width: 450px;
+      margin-right: 15px;
     }
   }
 </style>
@@ -63,62 +71,43 @@
     <div
       class="current-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
       <ArrowButton
-        handleClick={() => currentMonthIndex--}
+        handleClick={() => switchMonth(currentMonthIndex - 1)}
         direction="left"
         disabled={currentMonthIndex === 0} />
-      <div class="month-text">{shortMonth} {currentMonth?.getFullYear()}</div>
+      <div class="month-text">{shortCurrentMonth} {currentMonth?.getFullYear()}</div>
       <ArrowButton
-        handleClick={() => currentMonthIndex++}
+        handleClick={() => switchMonth(currentMonthIndex + 1)}
         direction="right"
-        disabled={currentMonthIndex === monthsData.length} />
+        disabled={currentMonthIndex === availableMonths.length} />
     </div>
     <div
-      class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
+      class="next-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
       {shortNextMonth}
       {nextMonth?.getFullYear()}
     </div>
   </div>
   <div class="summary flex divide-x">
-    <div
-      class="current-month py-2 sm:h-28 bg-gray-100 month-summary hidden sm:flex justify-around items-center px-2">
-      <div class="hidden sm:flex flex-col text-sm text-gray-600">
-        <span>$0.00 Funds for {shortMonth}</span>
-        <span>$0.00 Overspent for {shortPrevMonth}</span>
-        <span>$0.00 Budgeted for {shortMonth}</span>
-        <span>$0.00 Budgeted for Future</span>
-      </div>
-      <div class="text-green-700 flex flex-col items-center">
-        <span class="font-medium text-4xl">$1,000</span>
-        <span>Available to Budget</span>
-      </div>
-    </div>
-    <div
-      class="next-month h-28 scroll-margin bg-gray-100 month-summary flex justify-around items-center px-2">
-      <div class="flex flex-col text-sm">
-        <span>$0.00 Funds for {shortNextMonth}</span>
-        <span>$0.00 Overspent for {shortMonth}</span>
-        <span>$0.00 Budgeted for {shortNextMonth}</span>
-        <span>$0.00 Budgeted for Future</span>
-      </div>
-      <div class="text-gray-600 flex flex-col items-center">
-        <span class="font-medium text-4xl">$1,000</span>
-        <span>Available to Budget</span>
-      </div>
-    </div>
+    <MonthSummary
+      budgetName={currentBudget.name}
+      monthData={currentMonthData}
+      carryOver={currentMonthCarryover}
+      available={currentMonthAvailable}
+      shortMonth={shortCurrentMonth}
+      {shortPrevMonth} />
+    <MonthSummary
+      nextMonth
+      monthData={nextMonthData}
+      carryOver={nextMonthCarryover}
+      available={nextMonthAvailable}
+      shortMonth={shortNextMonth}
+      shortPrevMonth={shortCurrentMonth} />
   </div>
   <div class="categories flex flex-col sm:flex-row overflow-y-scroll divide-x">
-    <div class="flex sm:hidden flex-col bg-gray-100">
-      <span class="text-xl text-green-700 text-center">{currentBudget.name}</span>
-      <div class="text-green-700 flex flex-col items-center">
-        <span class="font-medium text-4xl">$1,000</span>
-        <span>Available to Budget</span>
-      </div>
-    </div>
     <div class="current-month flex">
-      <CategoryTotals {currentBudget} month="current" />
+      <CategoryTotals {currentBudget} month="current" monthData={currentMonthData} />
     </div>
     <div class="next-month flex flex-col">
-      <CategoryTotals {currentBudget} month="next" />
+      <CategoryTotals {currentBudget} month="next" monthData={nextMonthData} />
     </div>
   </div>
 </div>

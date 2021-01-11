@@ -1,6 +1,9 @@
 <script>
+  import currency from "currency.js";
+
   export let currentBudget;
   export let month;
+  export let monthData;
 </script>
 
 <style lang="scss">
@@ -12,7 +15,9 @@
       align-items: center;
       flex-wrap: wrap;
       flex: 1;
-      @apply text-gray-700 px-4 py-2;
+      @apply text-gray-700;
+      @apply px-4;
+      @apply py-2;
       & .category {
         flex: 1 0 240px;
         max-width: 80vw;
@@ -22,9 +27,9 @@
       }
       & .totals {
         flex: 1 0 260px;
-        @apply py-2 sm:py-1;
         display: flex;
         justify-content: space-between;
+        @apply py-2 sm:py-1;
       }
     }
   }
@@ -39,6 +44,16 @@
       <p>Budgeted</p>
       <p>Spent</p>
       <p>Available</p>
+    </div>
+  </div>
+  <div class="totals-row uppercase text-base sm:text-sm">
+    {#if month === 'current'}
+      <p class="category font-bold">Totals</p>
+    {/if}
+    <div class="totals font-bold">
+      <p>{currency(monthData.budgeted).format()}</p>
+      <p>{currency(monthData.spent).format()}</p>
+      <p>{currency(monthData.budgeted - monthData.spent).format()}</p>
     </div>
   </div>
   {#each currentBudget?.categoryGroups as group}

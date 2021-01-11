@@ -2,6 +2,29 @@ import { writable, derived, readable } from "svelte/store";
 import { nanoid } from "nanoid";
 import { auth, db } from "../utils/firebase";
 
+export const accountTypes = readable([
+  { name: "Checking", type: "Budget" },
+  { name: "Savings", type: "Budget" },
+  { name: "Credit Card", type: "Budget" },
+  { name: "Cash", type: "Budget" },
+  { name: "Line of Credit", type: "Budget" },
+  { name: "Mortgage", type: "Tracking" },
+  { name: "Investment Account", type: "Tracking" },
+  { name: "Other Asset", type: "Tracking" },
+  { name: "Other Liability", type: "Tracking" },
+]);
+
+export const budgets = writable([]);
+export const newAccountBalance = writable(null);
+export const newAccountError = writable("");
+export const newAccountName = writable("");
+export const newAccountType = writable("Checking");
+export const selectedAccount = writable(null);
+
+export const sortedBudgets = derived(budgets, ($budgets) =>
+  $budgets.sort((a, b) => a.createdTime - b.createdTime)
+);
+
 // load the budgets from firestore if there are any
 let updateBudgets;
 auth.onAuthStateChanged((currentUser) => {
@@ -43,6 +66,26 @@ export const createCategory = (groupId, name) => {
     hidden: false,
     deleted: false,
   };
+};
+
+export const createBudget = (name, currencyCode = "USD", accounts = []) => {
+  let now = new Date();
+  const { categoryGroups, categories } = createCategoryGroups();
+  const newBudget = {
+    id: nanoid(),
+    createdTime: Date.now(),
+    owner: auth.currentUser.uid,
+    sharedWith: [],
+    name: name,
+    firstMonth: new Date(now.getFullYear(), now.getMonth()).valueOf(),
+    availableMonths: availableMonths(),
+    lastOpened: Date.now(),
+    currencyCode,
+    accounts: accounts,
+    categoryGroups: categoryGroups,
+    categories: categories,
+  };
+  return newBudget;
 };
 
 const createCategoryGroups = () => {
@@ -88,48 +131,11 @@ const createCategoryGroups = () => {
   };
 };
 
-export const createBudget = (name, currencyCode = "USD", accounts = []) => {
+const availableMonths = () => {
+  let months = [];
   let now = new Date();
-  const { categoryGroups, categories } = createCategoryGroups();
-  const newBudget = {
-    id: nanoid(),
-    createdTime: Date.now(),
-    owner: auth.currentUser.uid,
-    sharedWith: [],
-    name: name,
-    firstMonth: new Date(now.getFullYear(), now.getMonth()).valueOf(),
-    lastOpened: Date.now(),
-    currencyCode,
-    accounts: accounts,
-    categoryGroups: categoryGroups,
-    categories: categories,
-  };
-  return newBudget;
+  for (let i = 0; i < 1200; i++) {
+    months.push(new Date(now.getFullYear(), now.getMonth() + i).valueOf());
+  }
+  return months;
 };
-
-export const budgets = writable([], () => {
-  console.log("got a subscriber to budgets");
-  return () => console.log("no more subscribers to budgets");
-});
-
-export const sortedBudgets = derived(budgets, ($budgets) =>
-  $budgets.sort((a, b) => a.createdTime - b.createdTime)
-);
-
-export const accountTypes = readable([
-  { name: "Checking", type: "Budget" },
-  { name: "Savings", type: "Budget" },
-  { name: "Credit Card", type: "Budget" },
-  { name: "Cash", type: "Budget" },
-  { name: "Line of Credit", type: "Budget" },
-  { name: "Mortgage", type: "Tracking" },
-  { name: "Investment Account", type: "Tracking" },
-  { name: "Other Asset", type: "Tracking" },
-  { name: "Other Liability", type: "Tracking" },
-]);
-
-export const newAccountBalance = writable(null);
-export const newAccountError = writable("");
-export const newAccountName = writable("");
-export const newAccountType = writable("Checking");
-export const selectedAccount = writable(null);
