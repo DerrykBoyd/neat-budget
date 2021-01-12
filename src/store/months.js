@@ -1,20 +1,43 @@
-import { db } from "../utils/firebase";
+import { auth, db } from "../utils/firebase";
 import { writable } from "svelte/store";
 
 export const months = createMonths();
 
+let monthsListener;
+export function loadMonths(budgetId) {
+  if (monthsListener) {
+    console.log("Removing Months Listener");
+    monthsListener();
+  }
+  console.log("Adding Months Listener");
+  monthsListener = db
+    .collection("budgets")
+    .doc(budgetId)
+    .collection("months")
+    .where("owner", "==", auth.currentUser.uid)
+    .onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        let changedMonth = change.doc.data();
+        if (change.type === "removed") months.deleteMonth(changedMonth);
+        else months.setMonth(changedMonth);
+      });
+    });
+}
+
 function createMonths() {
-  const { subscribe, set, update } = writable({
-    1609484400000: newMonth(1609484400000),
-    1612162800000: newMonth(1612162800000),
-  });
+  const { subscribe, set, update } = writable({});
   return {
     subscribe,
     set,
     update,
-    addMonth: (month) =>
+    setMonth: (month) =>
       update((months) => {
         months[month.month] = month;
+        return months;
+      }),
+    deleteMonth: (month) =>
+      update((months) => {
+        delete months[month.month];
         return months;
       }),
     addCategory: (categoryId, monthTimestamp) =>
@@ -25,12 +48,13 @@ function createMonths() {
   };
 }
 
-export function updateMonth(budgetId, month) {
+export function setMonth(budgetId, month) {
   db.collection("budgets").doc(budgetId).collection("months").doc(month.month).set(month);
 }
 
 export function newMonth(monthTimestamp) {
   return {
+    owner: auth.currentUser.uid,
     month: monthTimestamp,
     note: "",
     income: 100,

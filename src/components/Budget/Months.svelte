@@ -1,12 +1,13 @@
 <script>
   import ArrowButton from "../Base/ArrowButton.svelte";
   import CategoryTotals from "./CategoryTotals.svelte";
-  import { months, newMonth } from "../../store/months";
+  import { months, loadMonths } from "../../store/months";
   import currency from "currency.js";
   import MonthSummary from "./MonthSummary.svelte";
 
   export let currentBudget;
 
+  $: if (currentBudget) loadMonths(currentBudget.id);
   const availableMonths = currentBudget.availableMonths;
   const now = new Date();
   let currentMonth = new Date(now.getFullYear(), now.getMonth());
