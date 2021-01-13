@@ -1,12 +1,13 @@
 <script>
   import ArrowButton from "../Base/ArrowButton.svelte";
   import CategoryTotals from "./CategoryTotals.svelte";
-  import { months, newMonth } from "../../store/months";
+  import { months, loadMonths } from "../../store/months";
   import currency from "currency.js";
   import MonthSummary from "./MonthSummary.svelte";
 
   export let currentBudget;
 
+  $: if (currentBudget) loadMonths(currentBudget.id);
   const availableMonths = currentBudget.availableMonths;
   const now = new Date();
   let currentMonth = new Date(now.getFullYear(), now.getMonth());
@@ -57,11 +58,13 @@
   .next-month {
     display: none;
   }
+  .scroll-margin {
+    margin-right: 15px;
+  }
   @media (min-width: 1280px) {
     .next-month {
       display: flex;
       width: 450px;
-      margin-right: 15px;
     }
   }
 </style>
@@ -81,7 +84,7 @@
         disabled={currentMonthIndex === availableMonths.length} />
     </div>
     <div
-      class="next-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
+      class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
       {shortNextMonth}
       {nextMonth?.getFullYear()}
     </div>
@@ -103,6 +106,11 @@
       shortPrevMonth={shortCurrentMonth} />
   </div>
   <div class="categories flex flex-col sm:flex-row overflow-y-scroll divide-x">
+    <div class="text-green-700 sm:hidden flex flex-col items-center">
+      <span class="text-xl text-green-700 sm:hidden text-center">{currentBudget.name}</span>
+      <span class="font-medium text-4xl">{currency(currentMonthAvailable).format()}</span>
+      <span>Available to Budget</span>
+    </div>
     <div class="current-month flex">
       <CategoryTotals {currentBudget} month="current" monthData={currentMonthData} />
     </div>

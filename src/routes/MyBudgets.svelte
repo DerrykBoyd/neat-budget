@@ -27,6 +27,7 @@
   import { nanoid } from "nanoid";
   import currency from "currency.js";
   import AddAccountForm from "../components/Budget/AddAccountForm.svelte";
+  import { createTransaction } from "../store/transactions";
 
   currentPath.set("/settings");
   // redirect to home if not logged in.
@@ -62,15 +63,18 @@
     modalStatus.set("accounts");
   }
 
-  function addBudget() {
+  async function addBudget() {
     budgetNameError = "";
     if (!$newAccountName || !$newAccountType || !$newAccountBalance) {
       newAccountError.set("All fields are required");
       return;
     }
+    let newAccountId = nanoid();
+    let now = new Date();
+    let currentMonth = new Date(now.getFullYear(), now.getMonth());
     let accounts = [
       {
-        id: nanoid(),
+        id: newAccountId,
         name: $newAccountName,
         type: $newAccountType,
         onBudget: $accountTypes.find((type) => type.name === $newAccountType).type === "Budget",
@@ -80,8 +84,22 @@
         deleted: false,
       },
     ];
+    let firstTransaction = createTransaction({
+      amount: currency($newAccountBalance).value,
+      accountId: newAccountId,
+      payeeId: "Income",
+    });
     let newBudget = createBudget(budgetName, currencyFormat, accounts);
-    db.collection("budgets").doc(newBudget.id).set(newBudget);
+    await db.collection("budgets").doc(newBudget.id).set(newBudget);
+    const budgetRef = db.collection("budgets").doc(newBudget.id);
+    await budgetRef
+      .collection("months")
+      .doc(`${currentMonth.valueOf()}`)
+      .set(
+        { owner: auth.currentUser.uid, month: currentMonth.valueOf(), income: $newAccountBalance },
+        { merge: true }
+      );
+    await budgetRef.collection("transactions").doc(firstTransaction.id).set(firstTransaction);
     toggleModal();
     newAccountType.set("Checking");
     newAccountName.set("");

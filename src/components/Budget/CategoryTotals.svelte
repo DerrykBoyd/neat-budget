@@ -1,5 +1,6 @@
 <script>
   import currency from "currency.js";
+  import CategoryRow from "./CategoryRow.svelte";
 
   export let currentBudget;
   export let month;
@@ -57,20 +58,10 @@
     </div>
   </div>
   {#each currentBudget?.categoryGroups as group}
-    <div class="totals-row bg-green-100 text-xl sm:text-base">
-      {#if month === 'current'}
-        <p class="category bg-green-100 font-bold">{group?.name}</p>
-      {/if}
-      <div class="totals"><span>$0.00</span> <span>$0.00</span> <span>$0.00</span></div>
-    </div>
+    <CategoryRow group category={group} {month} {monthData} />
     {#each currentBudget?.categories as category}
       {#if group?.id === category?.groupId}
-        <div class="totals-row text-xl sm:text-base">
-          {#if month === 'current'}
-            <p class="category">{category?.name}</p>
-          {/if}
-          <div class="totals"><span>$0.00</span> <span>$0.00</span> <span>$0.00</span></div>
-        </div>
+        <CategoryRow {category} {month} {monthData} />
       {/if}
     {/each}
   {/each}
