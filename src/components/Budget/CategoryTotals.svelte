@@ -57,9 +57,9 @@
       <p>{currency(monthData?.budgeted - monthData?.spent || 0).format()}</p>
     </div>
   </div>
-  {#each currentBudget?.categoryGroups as group}
+  {#each currentBudget?.categoryGroups as group (group.id)}
     <CategoryRow group category={group} {month} {monthData} />
-    {#each currentBudget?.categories as category}
+    {#each currentBudget?.categories as category (category.id)}
       {#if group?.id === category?.groupId}
         <CategoryRow {category} {month} {monthData} />
       {/if}

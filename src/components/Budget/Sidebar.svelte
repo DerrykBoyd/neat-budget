@@ -79,13 +79,13 @@
   </div>
   <div class="sidebar-accounts grid grid-cols-1 overflow-y-auto">
     <div class="px-4 pt-2 pb-1 underline font-medium">On Budget Accounts</div>
-    {#each currentBudget.accounts as account}
+    {#each currentBudget.accounts as account (account.id)}
       {#if account.onBudget}
         <SidebarLink name={account.name} balance={account.balance} accountId={account.id} />
       {/if}
     {/each}
     <div class="px-4 pt-2 pb-1 underline font-medium">Off Budget Accounts</div>
-    {#each currentBudget.accounts as account}
+    {#each currentBudget.accounts as account (account.id)}
       {#if !account.onBudget}
         <SidebarLink name={account.name} balance={account.balance} accountId={account.id} />
       {/if}

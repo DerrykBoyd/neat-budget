@@ -153,7 +153,7 @@
         {/if}
       </div>
       <div class="budget-grid">
-        {#each $sortedBudgets as budget}
+        {#each $sortedBudgets as budget (budget.id)}
           <BudgetCard {budget} {setDefaultBudget} />
         {/each}
         <AddBudgetCard {toggleModal} />
