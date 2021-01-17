@@ -5,11 +5,22 @@
   export let monthData;
   export let group = false;
 
-  let categoryData = monthData?.categories[category.id];
+  let categoryData = monthData?.categories?.[category.id] || null;
   let budgeted = categoryData?.budgeted || 0;
   let spent = categoryData?.spent || 0;
   let available = budgeted - spent;
 </script>
+
+<div class={`${group ? "bg-green-100" : ""} totals-row text-xl sm:text-base`}>
+  {#if month === "current"}
+    <p class={`${group ? "font-bold" : ""} category`}>{category?.name}</p>
+  {/if}
+  <div class="totals">
+    <span>{currency(budgeted).format()}</span>
+    <span>{currency(spent).format()}</span>
+    <span>{currency(available).format()}</span>
+  </div>
+</div>
 
 <style lang="scss">
   .totals-row {
@@ -35,14 +46,3 @@
     }
   }
 </style>
-
-<div class={`${group ? 'bg-green-100' : ''} totals-row text-xl sm:text-base`}>
-  {#if month === 'current'}
-    <p class={`${group ? 'font-bold' : ''} category`}>{category?.name}</p>
-  {/if}
-  <div class="totals">
-    <span>{currency(budgeted).format()}</span>
-    <span>{currency(spent).format()}</span>
-    <span>{currency(available).format()}</span>
-  </div>
-</div>
