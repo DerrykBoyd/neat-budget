@@ -92,13 +92,14 @@
     let newBudget = createBudget(budgetName, currencyFormat, accounts);
     await db.collection("budgets").doc(newBudget.id).set(newBudget);
     const budgetRef = db.collection("budgets").doc(newBudget.id);
-    await budgetRef
-      .collection("months")
-      .doc(`${currentMonth.valueOf()}`)
-      .set(
-        { owner: auth.currentUser.uid, month: currentMonth.valueOf(), income: $newAccountBalance },
-        { merge: true }
-      );
+    await budgetRef.collection("months").doc(`${currentMonth.valueOf()}`).set(
+      {
+        owner: auth.currentUser.uid,
+        month: currentMonth.valueOf(),
+        income: $newAccountBalance,
+      },
+      { merge: true }
+    );
     await budgetRef.collection("transactions").doc(firstTransaction.id).set(firstTransaction);
     toggleModal();
     newAccountType.set("Checking");
@@ -127,6 +128,63 @@
   modalStatus.set("settings");
 </script>
 
+{#if loggedIn}
+  {#if !$userLoaded}
+    <Loader color="grey" />
+  {:else}
+    <div class="px-2">
+      <div class="flex items-center">
+        <h2 class="text-gray-600 font-medium uppercase tracking-wide pr-4 my-2">My Budgets</h2>
+        {#if defaultSaved}
+          <InfoMessage icon="cloud_done">Saved</InfoMessage>
+        {/if}
+      </div>
+      <div class="budget-grid">
+        {#each $sortedBudgets as budget (budget.id)}
+          <BudgetCard {budget} {setDefaultBudget} />
+        {/each}
+        <AddBudgetCard {toggleModal} />
+      </div>
+    </div>
+    <Modal showModal={newBudgetModal}>
+      {#if $modalStatus === "settings"}
+        <div>
+          <h3 class="text-xl font-bold">Budget Settings</h3>
+          <Input
+            bind:value={budgetName}
+            name="budget-name"
+            placeholder="Budget name"
+            label="Name"
+            onEnter={addBudget}
+          />
+          {#if budgetNameError}
+            <InfoMessage icon="error" color="text-red-800">{budgetNameError}</InfoMessage>
+          {/if}
+          <Select
+            bind:value={currencyFormat}
+            options={["USD", "CAD", "GBP", "EUR"]}
+            label="Currency Format"
+          />
+        </div>
+      {:else}
+        <AddAccountForm onboarding />
+      {/if}
+      <div slot="actions" class="relative flex justify-end items-center">
+        {#if $modalStatus === "settings"}
+          <Button handleClick={toggleModal} color="grey">Cancel</Button>
+          <Button handleClick={saveSettings}>Next</Button>
+        {:else}
+          <Button handleClick={() => modalStatus.set("settings")} color="grey">Back</Button>
+          <Button handleClick={addBudget}>Save</Button>
+        {/if}
+      </div>
+    </Modal>
+  {/if}
+{:else}
+  <!-- Not logged in -->
+  <div>You must be logged in to view your budgets.</div>
+{/if}
+
 <style>
   .budget-grid {
     display: grid;
@@ -140,58 +198,3 @@
     }
   }
 </style>
-
-{#if loggedIn}
-  {#if !$userLoaded}
-    <Loader color="grey" />
-  {:else}
-    <div class="px-2">
-      <div class="flex items-center">
-        <h2 class="text-gray-600 font-medium uppercase tracking-wide pr-4 my-2">My Budgets</h2>
-        {#if defaultSaved}
-          <InfoMessage icon="cloud_done">Saved</InfoMessage>
-        {/if}
-      </div>
-      <div class="budget-grid">
-        {#each $sortedBudgets as budget}
-          <BudgetCard {budget} {setDefaultBudget} />
-        {/each}
-        <AddBudgetCard {toggleModal} />
-      </div>
-    </div>
-    <Modal showModal={newBudgetModal}>
-      {#if $modalStatus === 'settings'}
-        <div>
-          <h3 class="text-xl font-bold">Budget Settings</h3>
-          <Input
-            bind:value={budgetName}
-            name="budget-name"
-            placeholder="Budget name"
-            label="Name"
-            onEnter={addBudget} />
-          {#if budgetNameError}
-            <InfoMessage icon="error" color="text-red-800">{budgetNameError}</InfoMessage>
-          {/if}
-          <Select
-            bind:value={currencyFormat}
-            options={['USD', 'CAD', 'GBP', 'EUR']}
-            label="Currency Format" />
-        </div>
-      {:else}
-        <AddAccountForm onboarding />
-      {/if}
-      <div slot="actions" class="relative flex justify-end items-center">
-        {#if $modalStatus === 'settings'}
-          <Button handleClick={toggleModal} color="grey">Cancel</Button>
-          <Button handleClick={saveSettings}>Next</Button>
-        {:else}
-          <Button handleClick={() => modalStatus.set('settings')} color="grey">Back</Button>
-          <Button handleClick={addBudget}>Save</Button>
-        {/if}
-      </div>
-    </Modal>
-  {/if}
-{:else}
-  <!-- Not logged in -->
-  <div>You must be logged in to view your budgets.</div>
-{/if}

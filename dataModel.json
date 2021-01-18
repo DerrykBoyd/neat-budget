@@ -124,8 +124,6 @@
           "month": "timeStamp",
           "note": "string",
           "income": "int",
-          "budgeted": "int",
-          "spent": "int",
           "categories": {
             "categoryId": {
               "budgeted": "int",
