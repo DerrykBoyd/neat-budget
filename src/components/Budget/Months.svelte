@@ -40,6 +40,63 @@
   }
 </script>
 
+<div class="months">
+  <div class="header flex divide-x">
+    <div
+      class="current-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100"
+    >
+      <ArrowButton
+        handleClick={() => switchMonth(currentMonthIndex - 1)}
+        direction="left"
+        disabled={currentMonthIndex === 0}
+      />
+      <div class="month-text">{shortCurrentMonth} {currentMonth?.getFullYear()}</div>
+      <ArrowButton
+        handleClick={() => switchMonth(currentMonthIndex + 1)}
+        direction="right"
+        disabled={currentMonthIndex === availableMonths.length}
+      />
+    </div>
+    <div
+      class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100"
+    >
+      {shortNextMonth}
+      {nextMonth?.getFullYear()}
+    </div>
+  </div>
+  <div class="summary flex divide-x">
+    <MonthSummary
+      budgetName={currentBudget.name}
+      monthData={currentMonthData}
+      carryOver={currentMonthCarryover}
+      available={currentMonthAvailable}
+      shortMonth={shortCurrentMonth}
+      {shortPrevMonth}
+    />
+    <MonthSummary
+      nextMonth
+      monthData={nextMonthData}
+      carryOver={nextMonthCarryover}
+      available={nextMonthAvailable}
+      shortMonth={shortNextMonth}
+      shortPrevMonth={shortCurrentMonth}
+    />
+  </div>
+  <div class="categories flex flex-col sm:flex-row overflow-y-scroll divide-x">
+    <div class="text-green-700 sm:hidden flex flex-col items-center">
+      <span class="text-xl text-green-700 sm:hidden text-center">{currentBudget.name}</span>
+      <span class="font-medium text-4xl">{currency(currentMonthAvailable).format()}</span>
+      <span>Available to Budget</span>
+    </div>
+    <div class="current-month flex">
+      <CategoryTotals {currentBudget} month="current" monthData={currentMonthData} />
+    </div>
+    <div class="next-month flex flex-col">
+      <CategoryTotals {currentBudget} month="next" monthData={nextMonthData} />
+    </div>
+  </div>
+</div>
+
 <style>
   .months {
     display: grid;
@@ -64,58 +121,7 @@
   @media (min-width: 1280px) {
     .next-month {
       display: flex;
-      width: 450px;
+      width: 360px;
     }
   }
 </style>
-
-<div class="months">
-  <div class="header flex divide-x">
-    <div
-      class="current-month bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
-      <ArrowButton
-        handleClick={() => switchMonth(currentMonthIndex - 1)}
-        direction="left"
-        disabled={currentMonthIndex === 0} />
-      <div class="month-text">{shortCurrentMonth} {currentMonth?.getFullYear()}</div>
-      <ArrowButton
-        handleClick={() => switchMonth(currentMonthIndex + 1)}
-        direction="right"
-        disabled={currentMonthIndex === availableMonths.length} />
-    </div>
-    <div
-      class="next-month scroll-margin bg-green-800 flex justify-center items-center h-14 font-medium text-gray-100">
-      {shortNextMonth}
-      {nextMonth?.getFullYear()}
-    </div>
-  </div>
-  <div class="summary flex divide-x">
-    <MonthSummary
-      budgetName={currentBudget.name}
-      monthData={currentMonthData}
-      carryOver={currentMonthCarryover}
-      available={currentMonthAvailable}
-      shortMonth={shortCurrentMonth}
-      {shortPrevMonth} />
-    <MonthSummary
-      nextMonth
-      monthData={nextMonthData}
-      carryOver={nextMonthCarryover}
-      available={nextMonthAvailable}
-      shortMonth={shortNextMonth}
-      shortPrevMonth={shortCurrentMonth} />
-  </div>
-  <div class="categories flex flex-col sm:flex-row overflow-y-scroll divide-x">
-    <div class="text-green-700 sm:hidden flex flex-col items-center">
-      <span class="text-xl text-green-700 sm:hidden text-center">{currentBudget.name}</span>
-      <span class="font-medium text-4xl">{currency(currentMonthAvailable).format()}</span>
-      <span>Available to Budget</span>
-    </div>
-    <div class="current-month flex">
-      <CategoryTotals {currentBudget} month="current" monthData={currentMonthData} />
-    </div>
-    <div class="next-month flex flex-col">
-      <CategoryTotals {currentBudget} month="next" monthData={nextMonthData} />
-    </div>
-  </div>
-</div>

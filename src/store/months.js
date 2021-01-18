@@ -49,7 +49,7 @@ function createMonths() {
 }
 
 export function setMonth(budgetId, month) {
-  db.collection("budgets").doc(budgetId).collection("months").doc(month.month).set(month);
+  db.collection("budgets").doc(budgetId).collection("months").doc(`${month.month}`).set(month);
 }
 
 export function newMonth(monthTimestamp) {
@@ -57,9 +57,7 @@ export function newMonth(monthTimestamp) {
     owner: auth.currentUser.uid,
     month: monthTimestamp,
     note: "",
-    income: 100,
-    budgeted: 50,
-    spent: 110,
+    income: 0,
     categories: {},
   };
 }
