@@ -1,7 +1,7 @@
 <script>
   import ArrowButton from "../Base/ArrowButton.svelte";
   import CategoryTotals from "./CategoryTotals.svelte";
-  import { months, loadMonths } from "../../store/months";
+  import { months, loadMonths, getAvailable } from "../../store/months";
   import currency from "currency.js";
   import MonthSummary from "./MonthSummary.svelte";
 
@@ -14,6 +14,7 @@
   let currentMonthIndex = currentBudget?.availableMonths?.findIndex(
     (month) => month === currentMonth.valueOf()
   );
+  let currentMonthAvailable = 0;
 
   $: console.log({ currentBudget }); // log the state
   $: console.log({ $months }); // log the state
@@ -28,8 +29,7 @@
   $: prevMonthData = $months[prevMonth.valueOf()] || null;
   $: currentMonthData = $months[currentMonth.valueOf()] || null;
   $: currentMonthCarryover = prevMonthData?.income - prevMonthData?.spent || 0;
-  $: currentMonthAvailable =
-    currentMonthData?.income + currentMonthCarryover - currentMonthData?.budgeted || 0;
+  $: if ($months) currentMonthAvailable = getAvailable(currentMonth.valueOf());
   $: nextMonthData = $months[nextMonth.valueOf()] || null;
   $: nextMonthCarryover = currentMonthData?.income - currentMonthData?.spent || 0;
   $: nextMonthAvailable = nextMonthData?.income + nextMonthCarryover - nextMonthData?.budgeted || 0;
@@ -67,17 +67,15 @@
   <div class="summary flex divide-x">
     <MonthSummary
       budgetName={currentBudget.name}
+      monthId={currentMonth.valueOf()}
       monthData={currentMonthData}
-      carryOver={currentMonthCarryover}
-      available={currentMonthAvailable}
       shortMonth={shortCurrentMonth}
       {shortPrevMonth}
     />
     <MonthSummary
       nextMonth
       monthData={nextMonthData}
-      carryOver={nextMonthCarryover}
-      available={nextMonthAvailable}
+      monthId={nextMonth.valueOf()}
       shortMonth={shortNextMonth}
       shortPrevMonth={shortCurrentMonth}
     />
@@ -131,7 +129,7 @@
   @media (min-width: 1280px) {
     .next-month {
       display: flex;
-      width: 360px;
+      width: 375px;
     }
   }
 </style>

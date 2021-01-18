@@ -1,5 +1,6 @@
 import { auth, db } from "../utils/firebase";
-import { writable } from "svelte/store";
+import { writable, get } from "svelte/store";
+import currency from "currency.js";
 
 export const months = createMonths();
 
@@ -73,4 +74,41 @@ export async function newMonth(budgetId, monthTimestamp) {
     categories: {},
   };
   await setMonth(budgetId, month);
+}
+
+export function getCarryOver(monthId) {
+  let monthArr = Object.values(get(months));
+  let carryOver = 0;
+  monthArr.forEach((month) => {
+    if (month.month < monthId) {
+      const totalBudgeted = Object.values(month.categories).reduce(
+        (budgeted, category) => (budgeted += currency(category.budgeted).value),
+        0
+      );
+      carryOver += month.income - totalBudgeted;
+    }
+  });
+  return carryOver;
+}
+
+export function getBudgeted(monthId) {
+  const monthArr = Object.values(get(months)) || [];
+  const month = monthArr.find((month) => month.month === monthId);
+  let totalBudgeted = 0;
+  if (month?.categories) {
+    totalBudgeted = Object.values(month?.categories).reduce(
+      (budgeted, category) => (budgeted += currency(category.budgeted).value),
+      0
+    );
+  }
+  return totalBudgeted;
+}
+
+export function getAvailable(monthId) {
+  const monthArr = Object.values(get(months)) || [];
+  const month = monthArr.find((month) => month.month === monthId);
+  let funds = month?.income || 0;
+  let available = funds + getCarryOver(monthId) - getBudgeted(monthId);
+  debugger;
+  return available;
 }

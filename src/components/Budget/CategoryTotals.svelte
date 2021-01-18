@@ -91,7 +91,7 @@
       @apply px-4;
       @apply py-1;
       & .category {
-        flex: 1 0 240px;
+        flex: 1 0 200px;
         max-width: 80vw;
         white-space: nowrap;
         overflow: hidden;

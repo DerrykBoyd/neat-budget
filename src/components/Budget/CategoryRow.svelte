@@ -80,7 +80,7 @@
       @apply py-2 sm:py-1 align-middle;
     }
     & .category {
-      flex: 1 0 240px;
+      flex: 1 0 200px;
       max-width: 80vw;
       white-space: nowrap;
       overflow: hidden;
