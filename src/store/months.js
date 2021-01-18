@@ -3,6 +3,8 @@ import { writable } from "svelte/store";
 
 export const months = createMonths();
 
+const budgetsRef = db.collection("budgets");
+
 let monthsListener;
 export function loadMonths(budgetId) {
   if (monthsListener) {
@@ -49,15 +51,26 @@ function createMonths() {
 }
 
 export function setMonth(budgetId, month) {
-  db.collection("budgets").doc(budgetId).collection("months").doc(`${month.month}`).set(month);
+  return budgetsRef.doc(budgetId).collection("months").doc(`${month.month}`).set(month);
 }
 
-export function newMonth(monthTimestamp) {
-  return {
+export function setBudgeted(budgetId, monthId, categoryId, amount) {
+  budgetsRef
+    .doc(budgetId)
+    .collection("months")
+    .doc(`${monthId}`)
+    .update({
+      [`categories.${categoryId}.budgeted`]: amount,
+    });
+}
+
+export async function newMonth(budgetId, monthTimestamp) {
+  const month = {
     owner: auth.currentUser.uid,
     month: monthTimestamp,
     note: "",
     income: 0,
     categories: {},
   };
+  await setMonth(budgetId, month);
 }

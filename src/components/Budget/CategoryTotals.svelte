@@ -5,20 +5,31 @@
   export let currentBudget;
   export let month;
   export let monthData;
+  export let monthTimeStamp;
 
   let totalBudgeted;
+  let totalSpent;
+  let totalAvailable;
 
   $: totalBudgeted =
     monthData?.categories &&
-    Object.values(monthData?.categories).reduce((total, category) => {
-      return (total += category.budgeted);
-    });
+    Object.values(monthData?.categories).reduce((total, category, ind, arr) => {
+      return (total += currency(category.budgeted).value);
+    }, 0);
+
+  $: totalSpent =
+    monthData?.categories &&
+    Object.values(monthData?.categories).reduce((total, category, ind, arr) => {
+      return (total += currency(category.spent).value);
+    }, 0);
+
+  $: totalAvailable = totalBudgeted - totalSpent;
 </script>
 
 <div class="totals-grid divide-y">
   <div class="totals-row uppercase">
     {#if month === "current"}
-      <p class="category font-bold">Category</p>
+      <p class="category font-bold hidden sm:block">Category</p>
     {/if}
     <div class="totals w-full">
       <span class="py-2 sm:py-1 w-32">Budgeted</span>
@@ -28,7 +39,7 @@
   </div>
   <div class="totals-row uppercase text-xl sm:text-base">
     {#if month === "current"}
-      <p class="category font-bold">Totals</p>
+      <p class="category font-bold hidden sm:block">Totals</p>
     {/if}
     <div class="totals">
       <div>
@@ -45,17 +56,15 @@
           />
         </div>
       </div>
-      <span class="budgeted-value">{currency(monthData?.spent || 0).format()}</span>
-      <span class="budgeted-value"
-        >{currency(monthData?.budgeted - monthData?.spent || 0).format()}</span
-      >
+      <span class="budgeted-value">{currency(totalSpent || 0).format()}</span>
+      <span class="budgeted-value">{currency(totalAvailable || 0).format()}</span>
     </div>
   </div>
   {#each currentBudget?.categoryGroups as group (group.id)}
-    <CategoryRow group category={group} {month} {monthData} {currentBudget} />
+    <CategoryRow group category={group} {month} {monthData} {currentBudget} {monthTimeStamp} />
     {#each currentBudget?.categories as category (category.id)}
       {#if group?.id === category?.groupId}
-        <CategoryRow {category} {month} {monthData} {currentBudget} />
+        <CategoryRow {category} {month} {monthData} {currentBudget} {monthTimeStamp} />
       {/if}
     {/each}
   {/each}

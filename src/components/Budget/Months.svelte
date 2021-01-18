@@ -89,10 +89,20 @@
       <span>Available to Budget</span>
     </div>
     <div class="current-month flex">
-      <CategoryTotals {currentBudget} month="current" monthData={currentMonthData} />
+      <CategoryTotals
+        {currentBudget}
+        month="current"
+        monthData={currentMonthData}
+        monthTimeStamp={currentMonth.valueOf()}
+      />
     </div>
     <div class="next-month flex flex-col">
-      <CategoryTotals {currentBudget} month="next" monthData={nextMonthData} />
+      <CategoryTotals
+        {currentBudget}
+        month="next"
+        monthData={nextMonthData}
+        monthTimeStamp={nextMonth.valueOf()}
+      />
     </div>
   </div>
 </div>

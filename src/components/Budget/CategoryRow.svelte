@@ -1,53 +1,65 @@
 <script>
   import currency from "currency.js";
-  import { setMonth } from "../../store/months";
+  import { newMonth, setBudgeted, setMonth } from "../../store/months";
   import { db } from "../../utils/firebase";
   export let category;
   export let currentBudget;
   export let month;
   export let monthData;
   export let group = false;
+  export let monthTimeStamp;
 
-  let categoryData = monthData?.categories?.[category.id] || null;
-  let budgeted = currency(categoryData?.budgeted || 0);
+  let categoryData;
+  let budgeted;
   let budgetedFormatted;
+  let spent;
+  let available;
+
+  $: categoryData = monthData?.categories?.[category.id] || null;
+  $: budgeted = currency(categoryData?.budgeted || 0);
+  $: budgetedFormatted;
   $: budgetedFormatted = currency(budgeted);
-  let spent = categoryData?.spent || 0;
-  let available = budgeted - spent;
+  $: spent = categoryData?.spent || 0;
+  $: available = budgeted - spent;
 </script>
 
 <div class={`${group ? "bg-green-100" : ""} totals-row text-xl sm:text-base`}>
   {#if month === "current"}
-    <p class={`${group ? "font-bold" : ""} category`}>{category?.name}</p>
+    <p class={`${group ? "font-bold" : ""} category h-8 sm:h-6`}>{category?.name}</p>
   {/if}
-  <div class="totals">
-    <div>
-      <div class="relative rounded-md">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <span class="text-gray-500">$</span>
+  {#if !group}
+    <div class="totals">
+      <div>
+        <div class="relative rounded-md">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span class="text-gray-500">$</span>
+          </div>
+          <input
+            disabled={group}
+            type="number"
+            step="0.01"
+            value={budgetedFormatted}
+            on:change={async (e) => {
+              console.log("change");
+              budgeted = e.target.value;
+              if (!monthData) await newMonth(currentBudget.id, monthTimeStamp);
+              if (!monthData?.categories) monthData.categories = {};
+              if (!monthData?.categories?.[category.id]) monthData.categories[category.id] = {};
+              monthData.categories[category.id].budgeted = currency(budgeted);
+              setBudgeted(currentBudget.id, monthData.month, category.id, budgeted);
+            }}
+            class={`text-xl sm:text-base focus:ring-green-700 focus:border-green-700 pl-6 py-1 block w-32 bg-transparent rounded-md ${
+              group ? "border-transparent" : "hover:border-green-700 sm:border-transparent"
+            }`}
+          />
         </div>
-        <input
-          disabled={group}
-          type="number"
-          step="0.01"
-          value={budgetedFormatted}
-          on:change={(e) => {
-            console.log("change");
-            budgeted = e.target.value;
-            if (!monthData?.categories) monthData.categories = {};
-            if (!monthData?.categories?.[category.id]) monthData.categories[category.id] = {};
-            monthData.categories[category.id].budgeted = currency(budgeted);
-            setMonth(currentBudget.id, monthData);
-          }}
-          class={`text-xl sm:text-base focus:ring-green-700 focus:border-green-700 pl-6 py-1 block w-32 bg-transparent rounded-md ${
-            group ? "border-transparent" : "hover:border-green-700 sm:border-transparent"
-          }`}
-        />
       </div>
+      <span class="budgeted-value">{currency(spent).format()}</span>
+      <span class="budgeted-value">{currency(available).format()}</span>
     </div>
-    <span class="budgeted-value">{currency(spent).format()}</span>
-    <span class="budgeted-value">{currency(available).format()}</span>
-  </div>
+  {:else if month !== "current"}
+    <p class={`category h-8 sm:h-6`} />
+  {/if}
 </div>
 
 <style lang="scss">
