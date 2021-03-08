@@ -4,6 +4,27 @@ import { nanoid } from "nanoid";
 
 export const transactions = createTransactions();
 
+let transactionListener;
+export function loadTransactions(budgetId) {
+  if (transactionListener) {
+    console.log("Removing Transaction Listener");
+    transactionListener();
+  }
+  console.log("Adding Transaction Listener");
+  transactionListener = db
+    .collection("budgets")
+    .doc(budgetId)
+    .collection("transactions")
+    .where("owner", "==", auth.currentUser.uid)
+    .onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        let changedTransaction = change.doc.data();
+        if (change.type === "removed") transactions.deleteTransactions(changedTransaction);
+        else transactions.setTransaction(changedTransaction);
+      });
+    });
+}
+
 function createTransactions() {
   const { subscribe, set, update } = writable({});
   return {

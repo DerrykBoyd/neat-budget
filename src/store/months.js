@@ -81,11 +81,11 @@ export function getCarryOver(monthId) {
   let carryOver = 0;
   monthArr.forEach((month) => {
     if (month.month < monthId) {
-      const totalBudgeted = Object.values(month.categories).reduce(
-        (budgeted, category) => (budgeted += currency(category.budgeted).value),
+      const totalSpent = Object.values(month.categories).reduce(
+        (spent, category) => (spent += currency(category.spent).value || 0),
         0
       );
-      carryOver += month.income - totalBudgeted;
+      carryOver += month.income - totalSpent;
     }
   });
   return carryOver;
@@ -109,6 +109,5 @@ export function getAvailable(monthId) {
   const month = monthArr.find((month) => month.month === monthId);
   let funds = month?.income || 0;
   let available = funds + getCarryOver(monthId) - getBudgeted(monthId);
-  debugger;
   return available;
 }
