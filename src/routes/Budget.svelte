@@ -8,10 +8,12 @@
   import Sidebar from "../components/Budget/Sidebar.svelte";
   import Months from "../components/Budget/Months.svelte";
   import Account from "../components/Budget/Account.svelte";
+  import { loadTransactions } from "../store/transactions";
 
   export let id;
   let currentBudget = null;
   $: currentBudget = $budgets.find((budget) => budget.id === id);
+  $: if (currentBudget) loadTransactions(currentBudget.id);
   currentPath.set(`/budget/${id}`);
   // redirect to home if not logged in.
   let loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -21,6 +23,26 @@
 
   selectedAccount.set("Budget");
 </script>
+
+{#if loggedIn}
+  {#if !$displayName}
+    <Loader color="grey" />
+  {:else if !currentBudget}
+    <div>Budget not found</div>
+  {:else}
+    <div class="budget">
+      <Sidebar {currentBudget} />
+      {#if $selectedAccount === "Budget"}
+        <Months {currentBudget} />
+      {:else}
+        <Account />
+      {/if}
+    </div>
+  {/if}
+{:else}
+  <!-- Not logged in -->
+  <div>You must be logged in to view your budgets.</div>
+{/if}
 
 <style>
   .budget {
@@ -37,23 +59,3 @@
   @media (min-width: 1280px) {
   }
 </style>
-
-{#if loggedIn}
-  {#if !$displayName}
-    <Loader color="grey" />
-  {:else if !currentBudget}
-    <div>Budget not found</div>
-  {:else}
-    <div class="budget">
-      <Sidebar {currentBudget} />
-      {#if $selectedAccount === 'Budget'}
-        <Months {currentBudget} />
-      {:else}
-        <Account />
-      {/if}
-    </div>
-  {/if}
-{:else}
-  <!-- Not logged in -->
-  <div>You must be logged in to view your budgets.</div>
-{/if}
