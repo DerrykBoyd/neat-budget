@@ -16,6 +16,10 @@
 <div>
   <p>Account Screen here {$selectedAccount}</p>
   <p>Transaction Count: {accountTransactions.length}</p>
+  {#each accountTransactions as transaction}
+    <span>{transaction.amount}</span>
+    <span>{new Date(transaction.date).toDateString()}</span>
+  {/each}
 </div>
 
 <style>
