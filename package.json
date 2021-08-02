@@ -18,7 +18,7 @@
     "autoprefixer": "^10.1.0",
     "dotenv": "^8.2.0",
     "firestore-size": "^2.0.6",
-    "postcss": "^8.2.1",
+    "postcss": "^8.3.6",
     "postcss-nesting": "^7.0.1",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.0.0",
@@ -44,7 +44,7 @@
     "currency.js": "^2.0.3",
     "firebase": "^8.2.0",
     "firebaseui": "^4.7.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "nanoid": "^3.1.20",
     "svelte-fa": "^2.2.0"
   }

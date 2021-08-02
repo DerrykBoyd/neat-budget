@@ -185,15 +185,13 @@
   <div>You must be logged in to view your budgets.</div>
 {/if}
 
-<style>
+<style lang="scss">
   .budget-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 1rem;
     align-items: stretch;
-  }
-  @media screen and (max-width: 400px) {
-    .budget-grid {
+    @media screen and (max-width: 400px) {
       grid-template-columns: 1fr;
     }
   }
